@@ -1,0 +1,30 @@
+[gd_resource type="TileSet" load_steps=3 format=3 uid="uid://buhi7o0hny3i"]
+
+[ext_resource type="Texture2D" uid="uid://bvluigwe0brwi" path="res://resources/textures/ruins/ruins_back_wall.tres" id="1_8ykyg"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_gjisx"]
+texture = ExtResource("1_8ykyg")
+15:17/0 = 0
+16:17/0 = 0
+17:17/0 = 0
+14:18/0 = 0
+15:18/0 = 0
+16:18/0 = 0
+17:18/0 = 0
+18:18/0 = 0
+14:19/0 = 0
+15:19/0 = 0
+16:19/0 = 0
+17:19/0 = 0
+18:19/0 = 0
+14:20/0 = 0
+15:20/0 = 0
+16:20/0 = 0
+17:20/0 = 0
+18:20/0 = 0
+15:21/0 = 0
+16:21/0 = 0
+17:21/0 = 0
+
+[resource]
+sources/0 = SubResource("TileSetAtlasSource_gjisx")

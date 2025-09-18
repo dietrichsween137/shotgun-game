@@ -1,0 +1,15 @@
+[gd_scene load_steps=3 format=3 uid="uid://dxfq7nbiujf8q"]
+
+[ext_resource type="PackedScene" uid="uid://bq3w6lor8kqw4" path="res://scenes/ruins_test.tscn" id="1_0wfyh"]
+[ext_resource type="PackedScene" uid="uid://dcagmydpuoyx1" path="res://scenes/player.tscn" id="1_o5qli"]
+
+[node name="main" type="Node2D"]
+
+[node name="Ruins_Test" parent="." instance=ExtResource("1_0wfyh")]
+
+[node name="Player" parent="." instance=ExtResource("1_o5qli")]
+ground_accel = 10000
+ground_speed = 110
+position = Vector2(204, 198)
+
+[node name="DirectionalLight2D" type="DirectionalLight2D" parent="."]

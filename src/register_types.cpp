@@ -6,6 +6,8 @@
 #include <godot_cpp/godot.hpp>
 
 #include "example_class.h"
+#include "player.h"
+#include "state.h"
 
 using namespace godot;
 
@@ -15,6 +17,13 @@ void initialize_gdextension_types(ModuleInitializationLevel p_level)
 		return;
 	}
 	GDREGISTER_CLASS(ExampleClass);
+	GDREGISTER_RUNTIME_CLASS(Player);
+	GDREGISTER_RUNTIME_CLASS(StateMachine);
+	GDREGISTER_ABSTRACT_CLASS(State);
+	GDREGISTER_ABSTRACT_CLASS(PState);
+	GDREGISTER_CLASS(PStateIdle);
+	GDREGISTER_CLASS(PStateWalkRight);
+	GDREGISTER_CLASS(PStateWalkLeft);
 }
 
 void uninitialize_gdextension_types(ModuleInitializationLevel p_level) {

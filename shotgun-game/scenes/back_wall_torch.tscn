@@ -1,0 +1,81 @@
+[gd_scene load_steps=11 format=3 uid="uid://17tl8dqlqwgj"]
+
+[ext_resource type="Script" uid="uid://d1kvohumilj4e" path="res://scenes/back_wall_torch.gd" id="1_5ta5g"]
+[ext_resource type="Texture2D" uid="uid://ddji24466xarp" path="res://aseprite/ruins/objects/back_wall_torch/simple.png" id="2_n2u0c"]
+[ext_resource type="Texture2D" uid="uid://obgaxfdw6jtc" path="res://aseprite/ruins/objects/back_wall_torch/normal.png" id="3_5n4a6"]
+[ext_resource type="Texture2D" uid="uid://biudu717v8apu" path="res://aseprite/ruins/objects/back_wall_torch/specular.png" id="4_o4eoj"]
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_bfu13"]
+diffuse_texture = ExtResource("2_n2u0c")
+normal_texture = ExtResource("3_5n4a6")
+specular_texture = ExtResource("4_o4eoj")
+
+[sub_resource type="Animation" id="Animation_5ta5g"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [1]
+}
+
+[sub_resource type="Animation" id="Animation_hq4e4"]
+resource_name = "burn"
+length = 0.5
+loop_mode = 1
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3, 4]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_s0hx8"]
+_data = {
+&"RESET": SubResource("Animation_5ta5g"),
+&"burn": SubResource("Animation_hq4e4")
+}
+
+[sub_resource type="Gradient" id="Gradient_n2u0c"]
+offsets = PackedFloat32Array(0, 0.701299)
+colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_5n4a6"]
+gradient = SubResource("Gradient_n2u0c")
+width = 256
+height = 256
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+
+[node name="back wall torch" type="Node2D"]
+script = ExtResource("1_5ta5g")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = SubResource("CanvasTexture_bfu13")
+hframes = 5
+frame = 1
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_s0hx8")
+}
+
+[node name="PointLight2D" type="PointLight2D" parent="."]
+position = Vector2(0, -5)
+color = Color(1, 0.580667, 0.26, 1)
+energy = 5.0
+texture = SubResource("GradientTexture2D_5n4a6")
+height = 5.0

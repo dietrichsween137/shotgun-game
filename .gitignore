@@ -26,6 +26,7 @@ custom.py
 compile_commands.json
 
 extension_api.json
+.cache
 
 # Ignore files generated for documentation
 /src/gen
