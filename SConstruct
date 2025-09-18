@@ -6,7 +6,7 @@ from methods import print_error
 
 
 libname = "SHOTGUN-GAME"
-projectdir = "demo"
+projectdir = "shotgun-game"
 
 localEnv = Environment(tools=["default"], PLATFORM="")
 
