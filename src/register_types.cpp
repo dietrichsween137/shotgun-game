@@ -8,6 +8,7 @@
 #include "example_class.h"
 #include "player.h"
 #include "state.h"
+#include "pstate.h"
 
 using namespace godot;
 
