@@ -1,9 +1,16 @@
-[gd_resource type="TileSet" load_steps=3 format=3 uid="uid://buhi7o0hny3i"]
+[gd_resource type="TileSet" load_steps=6 format=3 uid="uid://buhi7o0hny3i"]
 
-[ext_resource type="Texture2D" uid="uid://bvluigwe0brwi" path="res://resources/textures/ruins/ruins_back_wall.tres" id="1_8ykyg"]
+[ext_resource type="Texture2D" uid="uid://cwoy3k4yk0v7g" path="res://aseprite/ruins/back wall/simple.png" id="1_m6n41"]
+[ext_resource type="Texture2D" uid="uid://dt8m45h6qkhs2" path="res://aseprite/ruins/back wall/normal.png" id="2_f75q2"]
+[ext_resource type="Texture2D" uid="uid://bhpixh4acnxom" path="res://aseprite/ruins/back wall/specular.png" id="3_oo2ib"]
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_c4o5h"]
+diffuse_texture = ExtResource("1_m6n41")
+normal_texture = ExtResource("2_f75q2")
+specular_texture = ExtResource("3_oo2ib")
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_gjisx"]
-texture = ExtResource("1_8ykyg")
+texture = SubResource("CanvasTexture_c4o5h")
 15:17/0 = 0
 16:17/0 = 0
 17:17/0 = 0
