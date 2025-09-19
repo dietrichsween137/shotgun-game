@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://dcagmydpuoyx1"]
+[gd_scene load_steps=15 format=3 uid="uid://dcagmydpuoyx1"]
 
 [ext_resource type="Texture2D" uid="uid://b456gooomh13" path="res://aseprite/characters/protagonist.png" id="1_3vyb7"]
 
@@ -91,9 +91,110 @@ tracks/0/keys = {
 "values": [Vector2i(0, 3)]
 }
 
+[sub_resource type="Animation" id="Animation_qlg0r"]
+resource_name = "jump_start"
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame_coords")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [Vector2i(0, 4)]
+}
+
+[sub_resource type="Animation" id="Animation_tuyoq"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame_coords")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [Vector2i(1, 4)]
+}
+
+[sub_resource type="Animation" id="Animation_fjrip"]
+resource_name = "jump_rise"
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame_coords")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [Vector2i(1, 4)]
+}
+
+[sub_resource type="Animation" id="Animation_smehm"]
+resource_name = "jump_crest"
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame_coords")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [Vector2i(3, 4)]
+}
+
+[sub_resource type="Animation" id="Animation_ur7pv"]
+resource_name = "jump_fall"
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame_coords")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [Vector2i(3, 4)]
+}
+
+[sub_resource type="Animation" id="Animation_y4r1p"]
+resource_name = "jump_land"
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame_coords")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [Vector2i(4, 4)]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_g2els"]
 _data = {
+&"RESET": SubResource("Animation_tuyoq"),
 &"idle": SubResource("Animation_u8vuu"),
+&"jump_crest": SubResource("Animation_smehm"),
+&"jump_fall": SubResource("Animation_ur7pv"),
+&"jump_land": SubResource("Animation_y4r1p"),
+&"jump_rise": SubResource("Animation_fjrip"),
+&"jump_start": SubResource("Animation_qlg0r"),
 &"walk_first_step": SubResource("Animation_3vyb7"),
 &"walk_first_step_to_idle": SubResource("Animation_g2els"),
 &"walk_second_step": SubResource("Animation_qhqgy"),
@@ -105,7 +206,8 @@ _data = {
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture = ExtResource("1_3vyb7")
 hframes = 8
-vframes = 4
+vframes = 5
+frame = 33
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 visible = false
