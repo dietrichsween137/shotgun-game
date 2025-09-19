@@ -62,11 +62,10 @@ void PStateIdle::physics_update(double delta) {
 	int horiz = static_cast<int>(input->get_axis("left", "right"));
 
 	switch (horiz) {
-		case 1:
-			emit_signal("switch_state", get_class(), "PStateWalkRight", dict);
-			return;
-		case -1:
-			emit_signal("switch_state", get_class(), "PStateWalkLeft", dict);
+		case 0:
+			break;
+		default:
+			emit_signal("switch_state", get_class(), "PStateWalk", dict);
 			return;
 	}
 
@@ -75,22 +74,21 @@ void PStateIdle::physics_update(double delta) {
 	}
 }
 
-void PStateWalkRight::_bind_methods() {
+void PStateWalk::_bind_methods() {
 	ADD_SIGNAL(MethodInfo("switch_state",
 		       PropertyInfo(Variant::STRING, "last_state"),
 		       PropertyInfo(Variant::STRING, "next_state"),
 		       PropertyInfo(Variant::DICTIONARY, "data")));
 }
 
-void PStateWalkRight::enter(String last_state, Dictionary data) {
+void PStateWalk::enter(String last_state, Dictionary data) {
 	animation_player->play("walk_first_step");
 	animation_player->queue("walk_second_step");
-	sprite->set_flip_h(false);
 
 	physics_update(data["delta"]);
 }
 
-void PStateWalkRight::physics_update(double delta) {
+void PStateWalk::physics_update(double delta) {
 	static Input* input = Input::get_singleton();
 	Dictionary dict = Dictionary();
 	dict["delta"] = delta;
@@ -102,50 +100,11 @@ void PStateWalkRight::physics_update(double delta) {
 			emit_signal("switch_state", get_class(), "PStateIdle", dict);
 			return;
 		case -1:
-			emit_signal("switch_state", get_class(), "PStateWalkLeft", dict);
-			return;
-	}
-
-	if (animation_player->get_queue().size() == 0) {
-		animation_player->queue("walk_first_step");
-		animation_player->queue("walk_second_step");
-	}
-
-	Vector2 velocity = player->get_velocity();
-	velocity.x = Math::min(velocity.x + player->get_ground_accel() * delta, player->get_ground_speed());
-	player->set_velocity(velocity);
-	player->move_and_slide();
-}
-
-void PStateWalkLeft::_bind_methods() {
-	ADD_SIGNAL(MethodInfo("switch_state",
-		       PropertyInfo(Variant::STRING, "last_state"),
-		       PropertyInfo(Variant::STRING, "next_state"),
-		       PropertyInfo(Variant::DICTIONARY, "data")));
-}
-
-void PStateWalkLeft::enter(String last_state, Dictionary data) {
-	animation_player->play("walk_first_step");
-	animation_player->queue("walk_second_step");
-	sprite->set_flip_h(true);
-
-	physics_update(data["delta"]);
-}
-
-void PStateWalkLeft::physics_update(double delta) {
-	static Input* input = Input::get_singleton();
-	Dictionary dict = Dictionary();
-	dict["delta"] = delta;
-
-	int horiz = static_cast<int>(input->get_axis("left", "right"));
-
-	switch (horiz) {
+			sprite->set_flip_h(true);
+			break;
 		case 1:
-			emit_signal("switch_state", get_class(), "PStateWalkRight", dict);
-			return;
-		case 0:
-			emit_signal("switch_state", get_class(), "PStateIdle", dict);
-			return;
+			sprite->set_flip_h(false);
+			break;
 	}
 
 	if (animation_player->get_queue().size() == 0) {
@@ -154,7 +113,11 @@ void PStateWalkLeft::physics_update(double delta) {
 	}
 
 	Vector2 velocity = player->get_velocity();
-	velocity.x = Math::max(velocity.x - player->get_ground_accel() * delta, -player->get_ground_speed());
+	if (sprite->is_flipped_h()) {
+		velocity.x = -player->get_ground_speed();
+	} else {
+		velocity.x = player->get_ground_speed();
+	}
 	player->set_velocity(velocity);
 	player->move_and_slide();
 }

@@ -34,17 +34,8 @@ public:
 	void physics_update(double delta) override;
 };
 
-class PStateWalkRight : public PState {
-	GDCLASS(PStateWalkRight, PState);
-protected:
-	static void _bind_methods();
-public:
-	void enter(String next_state, Dictionary data) override;
-	void physics_update(double delta) override;
-};
-
-class PStateWalkLeft : public PState {
-	GDCLASS(PStateWalkLeft, PState);
+class PStateWalk : public PState {
+	GDCLASS(PStateWalk, PState);
 protected:
 	static void _bind_methods();
 public:
