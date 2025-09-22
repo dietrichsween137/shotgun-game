@@ -121,3 +121,17 @@ void PStateWalk::physics_update(double delta) {
 	player->set_velocity(velocity);
 	player->move_and_slide();
 }
+
+void PStateJump::_bind_methods() {
+	ADD_SIGNAL(MethodInfo("switch_state",
+		       PropertyInfo(Variant::STRING, "last_state"),
+		       PropertyInfo(Variant::STRING, "next_state"),
+		       PropertyInfo(Variant::DICTIONARY, "data")));
+}
+
+void PStateJump::enter(String next_state, Dictionary data) {
+	physics_update(data["delta"]);
+}
+
+void PStateJump::physics_update(double delta) {
+}

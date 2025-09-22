@@ -186,6 +186,8 @@ _data = {
 }
 
 [node name="Player" type="Player"]
+jump_speed = 200
+gravity = 500
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture = ExtResource("1_3vyb7")
@@ -207,3 +209,5 @@ libraries = {
 [node name="PStateIdle" type="PStateIdle" parent="StateMachine"]
 
 [node name="PStateWalk" type="PStateWalk" parent="StateMachine"]
+
+[node name="PStateJump" type="PStateJump" parent="StateMachine"]

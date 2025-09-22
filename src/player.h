@@ -1,8 +1,7 @@
-#ifndef PLAYER_H	
-#define PLAYER_H	
+#ifndef PLAYER_H
+#define PLAYER_H
 
 #include "godot_cpp/classes/character_body2d.hpp"
-#include "godot_cpp/variant/vector2.hpp"
 
 namespace godot {
 
@@ -14,21 +13,25 @@ private:
 	StateMachine* state_machine;
 
 	int ground_speed;
-	int ground_accel;
+	int jump_speed;
+	int gravity;
 protected:
 	static void _bind_methods();
 public:
-	Player(): ground_speed {100}, ground_accel {10} {}
+	Player();
 	~Player() {}
-	
+
 	void _ready() override;
 	void _physics_process(double delta) override;
 
-	void set_ground_speed(const double p_ground_speed);
-	double get_ground_speed() const;
+	void set_ground_speed(const int p_ground_speed);
+	int get_ground_speed() const;
 
-	void set_ground_accel(const double p_ground_accel);
-	double get_ground_accel() const;
+	void set_jump_speed(const int p_jump_speed);
+	int get_jump_speed() const;
+
+	void set_gravity(const int p_gravity);
+	int get_gravity() const;
 };
 
 }
