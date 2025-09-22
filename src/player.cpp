@@ -5,7 +5,7 @@
 
 using namespace godot;
 
-Player::Player(): ground_accel {10}, ground_speed {100}, jump_speed {200}, gravity {500} {};
+Player::Player():ground_speed {100}, jump_speed {200}, gravity {500} {};
 
 void Player::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("get_ground_speed"), &Player::get_ground_speed);
