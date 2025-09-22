@@ -5,7 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://17tl8dqlqwgj" path="res://scenes/back_wall_torch.tscn" id="2_l5ma8"]
 [ext_resource type="TileSet" uid="uid://bfhuunkhckye2" path="res://resources/tilesets/ruins_ceiling.tres" id="3_l5ma8"]
 [ext_resource type="TileSet" uid="uid://bc6pk60bvfqy" path="res://resources/tilesets/ruins_floor.tres" id="4_200pw"]
-[ext_resource type="Texture2D" uid="uid://d14m3g61ghnoq" path="res://aseprite/ruins/Background.png" id="6_l5ma8"]
+[ext_resource type="Texture2D" uid="uid://bvtq3js8111go" path="res://aseprite/ruins/Background.png" id="6_l5ma8"]
 
 [node name="Ruins_Test" type="Node2D"]
 

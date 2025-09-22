@@ -1,6 +1,6 @@
 [gd_resource type="CanvasTexture" load_steps=2 format=3 uid="uid://drbqpjrj0hxpe"]
 
-[ext_resource type="Texture2D" uid="uid://dbxsyarey3byv" path="res://aseprite/ruins/objects/back_wall_torch/simple.png" id="1_ujnjw"]
+[ext_resource type="Texture2D" uid="uid://ddji24466xarp" path="res://aseprite/ruins/objects/back_wall_torch/simple.png" id="1_ujnjw"]
 
 [resource]
 diffuse_texture = ExtResource("1_ujnjw")

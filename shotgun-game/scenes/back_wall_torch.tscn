@@ -1,9 +1,9 @@
 [gd_scene load_steps=11 format=3 uid="uid://17tl8dqlqwgj"]
 
 [ext_resource type="Script" uid="uid://d1kvohumilj4e" path="res://scenes/back_wall_torch.gd" id="1_5ta5g"]
-[ext_resource type="Texture2D" uid="uid://dbxsyarey3byv" path="res://aseprite/ruins/objects/back_wall_torch/simple.png" id="2_n2u0c"]
-[ext_resource type="Texture2D" uid="uid://c0sbqbok4plag" path="res://aseprite/ruins/objects/back_wall_torch/normal.png" id="3_5n4a6"]
-[ext_resource type="Texture2D" uid="uid://bgx8kr2xf52ql" path="res://aseprite/ruins/objects/back_wall_torch/specular.png" id="4_o4eoj"]
+[ext_resource type="Texture2D" uid="uid://ddji24466xarp" path="res://aseprite/ruins/objects/back_wall_torch/simple.png" id="2_n2u0c"]
+[ext_resource type="Texture2D" uid="uid://obgaxfdw6jtc" path="res://aseprite/ruins/objects/back_wall_torch/normal.png" id="3_5n4a6"]
+[ext_resource type="Texture2D" uid="uid://biudu717v8apu" path="res://aseprite/ruins/objects/back_wall_torch/specular.png" id="4_o4eoj"]
 
 [sub_resource type="CanvasTexture" id="CanvasTexture_bfu13"]
 diffuse_texture = ExtResource("2_n2u0c")

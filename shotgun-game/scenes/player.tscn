@@ -1,6 +1,6 @@
 [gd_scene load_steps=14 format=3 uid="uid://dcagmydpuoyx1"]
 
-[ext_resource type="Texture2D" uid="uid://b456gooomh13" path="res://aseprite/characters/protagonist.png" id="1_3vyb7"]
+[ext_resource type="Texture2D" uid="uid://brb36c01ayh6e" path="res://aseprite/characters/protagonist.png" id="1_3vyb7"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_g2els"]
 radius = 15.0
