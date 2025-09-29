@@ -1,6 +1,8 @@
 #ifndef PSTATE_H
 #define PSTATE_H
 
+#include "godot_cpp/classes/input_event.hpp"
+#include "godot_cpp/classes/ref.hpp"
 #include "state.h"
 #include "godot_cpp/classes/animation_player.hpp"
 #include "godot_cpp/classes/sprite2d.hpp"
@@ -31,6 +33,7 @@ protected:
 public:
 	void enter(String next_state, Dictionary data) override;
 	void exit() override;
+	void handle_input(const Ref<InputEvent> &event) override;
 	void physics_update(double delta) override;
 };
 
@@ -40,6 +43,7 @@ protected:
 	static void _bind_methods();
 public:
 	void enter(String next_state, Dictionary data) override;
+	void handle_input(const Ref<InputEvent> &event) override;
 	void physics_update(double delta) override;
 };
 

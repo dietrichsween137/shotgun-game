@@ -1,7 +1,6 @@
 #include "state.h"
 #include "godot_cpp/core/class_db.hpp"
 #include "godot_cpp/variant/dictionary.hpp"
-#include "godot_cpp/variant/utility_functions.hpp"
 
 using namespace godot;
 
@@ -21,6 +20,10 @@ void StateMachine::_ready() {
 			state = static_cast<State*>(child);
 		}
 	}
+}
+
+void StateMachine::handle_input(const Ref<InputEvent> &event) {
+	state->handle_input(event);
 }
 
 void StateMachine::physics_update(double delta) {

@@ -1,8 +1,9 @@
 #include "pstate.h"
-#include "godot_cpp/core/math.hpp"
+#include "godot_cpp/classes/input_event.hpp"
 #include "godot_cpp/core/property_info.hpp"
 #include "godot_cpp/variant/dictionary.hpp"
 #include "godot_cpp/classes/input.hpp"
+#include "godot_cpp/variant/vector2.hpp"
 
 using namespace godot;
 
@@ -54,6 +55,12 @@ void PStateIdle::exit() {
 	animation_player->set_speed_scale(1.0);
 }
 
+void PStateIdle::handle_input(const Ref<InputEvent> &event) {
+	if (event.ptr()->is_action_pressed("jump")) {
+		emit_signal("switch_state", get_class(), "PStateJump", Dictionary());
+	}
+}
+
 void PStateIdle::physics_update(double delta) {
 	static Input* input = Input::get_singleton();
 	Dictionary dict = Dictionary();
@@ -86,6 +93,12 @@ void PStateWalk::enter(String last_state, Dictionary data) {
 	animation_player->queue("walk_second_step");
 
 	physics_update(data["delta"]);
+}
+
+void PStateWalk::handle_input(const Ref<InputEvent> &event) {
+	if (event.ptr()->is_action_pressed("jump")) {
+		emit_signal("switch_state", get_class(), "PStateJump", Dictionary());
+	}
 }
 
 void PStateWalk::physics_update(double delta) {
@@ -130,8 +143,23 @@ void PStateJump::_bind_methods() {
 }
 
 void PStateJump::enter(String next_state, Dictionary data) {
-	physics_update(data["delta"]);
+	Vector2 velocity = player->get_velocity();
+	velocity.y = -player->get_jump_speed();
+	player->set_velocity(velocity);
+
+	player->move_and_slide();
 }
 
 void PStateJump::physics_update(double delta) {
+	Vector2 velocity = player->get_velocity();
+	velocity.y += player->get_gravity() * delta;
+	player->set_velocity(velocity);
+
+	player->move_and_slide();
+
+	if (player->is_on_floor()) {
+		Dictionary dict = Dictionary();
+		dict["delta"] = delta;
+		emit_signal("switch_state", get_class(), "PStateIdle", dict);
+	}
 }

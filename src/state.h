@@ -3,6 +3,7 @@
 
 #include "godot_cpp/classes/input_event.hpp"
 #include "godot_cpp/classes/node.hpp"
+#include "godot_cpp/classes/ref.hpp"
 #include "godot_cpp/variant/dictionary.hpp"
 #include "player.h"
 
@@ -18,7 +19,7 @@ public:
 
 	virtual void enter(String last_state, Dictionary data) {};
 	virtual void exit() {};
-	virtual void handle_input(InputEvent event) {};
+	virtual void handle_input(const Ref<InputEvent> &event) {};
 	virtual void physics_update(double delta) = 0;
 };
 
@@ -33,6 +34,7 @@ public:
 	~StateMachine() {}
 
 	void _ready() override;
+	void handle_input(const Ref<InputEvent> &event);
 	void switch_state(String last_state, String next_state, Dictionary data);
 	void physics_update(double delta);
 };
