@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://dcagmydpuoyx1"]
+[gd_scene load_steps=15 format=3 uid="uid://dcagmydpuoyx1"]
 
 [ext_resource type="Texture2D" uid="uid://brb36c01ayh6e" path="res://aseprite/characters/protagonist.png" id="1_3vyb7"]
 
@@ -176,8 +176,25 @@ tracks/0/keys = {
 "values": [Vector2i(0, 3)]
 }
 
+[sub_resource type="Animation" id="Animation_tuyoq"]
+resource_name = "RESET"
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_g2els"]
 _data = {
+&"RESET": SubResource("Animation_tuyoq"),
 &"idle": SubResource("Animation_u8vuu"),
 &"jump_crest": SubResource("Animation_smehm"),
 &"jump_fall": SubResource("Animation_ur7pv"),
@@ -198,7 +215,6 @@ gravity = 1200.0
 texture = ExtResource("1_3vyb7")
 hframes = 8
 vframes = 5
-frame = 36
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 visible = false
