@@ -186,8 +186,8 @@ _data = {
 }
 
 [node name="Player" type="Player"]
-jump_speed = 250.0
-gravity = 1000.0
+jump_speed = 300.0
+gravity = 1200.0
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture = ExtResource("1_3vyb7")

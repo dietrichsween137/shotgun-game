@@ -63,8 +63,6 @@ void PStateIdle::handle_input(const Ref<InputEvent> &event) {
 
 void PStateIdle::physics_update(double delta) {
 	static Input* input = Input::get_singleton();
-	Dictionary dict = Dictionary();
-	dict["delta"] = delta;
 
 	int horiz = static_cast<int>(input->get_axis("left", "right"));
 
@@ -72,6 +70,8 @@ void PStateIdle::physics_update(double delta) {
 		case 0:
 			break;
 		default:
+			Dictionary dict = Dictionary();
+			dict["delta"] = delta;
 			emit_signal("switch_state", get_class(), "PStateWalk", dict);
 			return;
 	}
@@ -103,21 +103,20 @@ void PStateWalk::handle_input(const Ref<InputEvent> &event) {
 
 void PStateWalk::physics_update(double delta) {
 	static Input* input = Input::get_singleton();
-	Dictionary dict = Dictionary();
-	dict["delta"] = delta;
 
 	int horiz = static_cast<int>(input->get_axis("left", "right"));
-
 	switch (horiz) {
-		case 0:
-			emit_signal("switch_state", get_class(), "PStateIdle", dict);
-			return;
 		case -1:
 			sprite->set_flip_h(true);
 			break;
 		case 1:
 			sprite->set_flip_h(false);
 			break;
+		case 0:
+			Dictionary dict = Dictionary();
+			dict["delta"] = delta;
+			emit_signal("switch_state", get_class(), "PStateIdle", dict);
+			return;
 	}
 
 	if (animation_player->get_queue().size() == 0) {
