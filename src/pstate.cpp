@@ -54,6 +54,7 @@ void PStateIdle::enter(String last_state, Dictionary data) {
 
 void PStateIdle::exit() {
 	animation_player->set_speed_scale(1.0);
+	animation_player->clear_queue();
 }
 
 void PStateIdle::handle_input(const Ref<InputEvent> &event) {
@@ -90,8 +91,16 @@ void PStateWalk::_bind_methods() {
 }
 
 void PStateWalk::enter(String last_state, Dictionary data) {
-	animation_player->play("walk_first_step");
-	animation_player->queue("walk_second_step");
+	String current_animation = animation_player->get_current_animation();
+
+	if (current_animation == "jump_land") {
+		animation_player->queue("walk_second_step");
+		animation_player->queue("walk_first_step");
+		animation_player->queue("walk_second_step");
+	} else {
+		animation_player->play("walk_first_step");
+		animation_player->queue("walk_second_step");
+	}
 
 	physics_update(data["delta"]);
 }
@@ -180,7 +189,7 @@ void PStateJump::physics_update(double delta) {
 	player->move_and_slide();
 
 	if (player->is_on_floor()) {
-		animation_player->queue("jump_land");
+		animation_player->play("jump_land");
 		Dictionary dict = Dictionary();
 		dict["delta"] = delta;
 		emit_signal("switch_state", get_class(), "PStateIdle", dict);
