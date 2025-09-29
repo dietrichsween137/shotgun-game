@@ -3,6 +3,7 @@
 #include "godot_cpp/core/property_info.hpp"
 #include "godot_cpp/variant/dictionary.hpp"
 #include "godot_cpp/classes/input.hpp"
+#include "godot_cpp/variant/utility_functions.hpp"
 #include "godot_cpp/variant/vector2.hpp"
 
 using namespace godot;
@@ -142,21 +143,44 @@ void PStateJump::_bind_methods() {
 }
 
 void PStateJump::enter(String next_state, Dictionary data) {
+	animation_player->play("jump_start");
+	animation_player->queue("jump_rise");
+
 	Vector2 velocity = player->get_velocity();
-	velocity.y = -player->get_jump_speed();
+	velocity.y += -player->get_jump_speed();
 	player->set_velocity(velocity);
 
 	player->move_and_slide();
 }
 
 void PStateJump::physics_update(double delta) {
+	static String last_queued_animation = "";
+
 	Vector2 velocity = player->get_velocity();
+
+	if (last_queued_animation != "jump_crest" &&
+		0 > velocity.y &&
+		velocity.y > -player->get_jump_speed()) {
+
+		animation_player->queue("jump_crest");
+		last_queued_animation = "jump_crest";
+		UtilityFunctions::print("here");
+
+	} else if (last_queued_animation != "jump_fall" &&
+		0 < velocity.y) {
+
+		animation_player->queue("jump_fall");
+		last_queued_animation = "jump_fall";
+		UtilityFunctions::print("here2");
+	}
+
 	velocity.y += player->get_gravity() * delta;
 	player->set_velocity(velocity);
 
 	player->move_and_slide();
 
 	if (player->is_on_floor()) {
+		animation_player->queue("jump_land");
 		Dictionary dict = Dictionary();
 		dict["delta"] = delta;
 		emit_signal("switch_state", get_class(), "PStateIdle", dict);
