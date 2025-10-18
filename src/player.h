@@ -17,6 +17,7 @@ private:
 	double ground_speed;
 	double jump_speed;
 	double gravity;
+	double max_jump_rise_time;
 protected:
 	static void _bind_methods();
 public:
@@ -35,6 +36,9 @@ public:
 
 	void set_gravity(const double p_gravity);
 	double get_gravity() const;
+
+	void set_max_jump_rise_time(const double p_max_jump_rise_time);
+	double get_max_jump_rise_time() const;
 };
 
 }

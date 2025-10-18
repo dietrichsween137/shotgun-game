@@ -49,10 +49,16 @@ public:
 
 class PStateJump : public PState {
 	GDCLASS(PStateJump, PState);
+private:
+	double air_time;
 protected:
 	static void _bind_methods();
 public:
+	PStateJump(): air_time {0} {}
+	~PStateJump() {}
+
 	void enter(String next_state, Dictionary data) override;
+	void handle_input(const Ref<InputEvent> &event) override;
 	void physics_update(double delta) override;
 };
 

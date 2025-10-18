@@ -5,7 +5,7 @@
 
 using namespace godot;
 
-Player::Player():ground_speed {100}, jump_speed {200}, gravity {500} {};
+Player::Player():ground_speed {100}, jump_speed {200}, gravity {500}, max_jump_rise_time {2} {};
 
 void Player::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("get_ground_speed"), &Player::get_ground_speed);
@@ -14,10 +14,13 @@ void Player::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("set_jump_speed", "p_jump_speed"), &Player::set_jump_speed);
 	ClassDB::bind_method(D_METHOD("get_gravity"), &Player::get_gravity);
 	ClassDB::bind_method(D_METHOD("set_gravity", "p_gravity"), &Player::set_gravity);
+	ClassDB::bind_method(D_METHOD("get_max_jump_rise_time"), &Player::get_max_jump_rise_time);
+	ClassDB::bind_method(D_METHOD("set_max_jump_rise_time", "p_max_jump_rise_time"), &Player::set_max_jump_rise_time);
 
 	ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "ground_speed"), "set_ground_speed", "get_ground_speed");
 	ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "jump_speed"), "set_jump_speed", "get_jump_speed");
 	ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "gravity"), "set_gravity", "get_gravity");
+	ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "max_jump_rise_time"), "set_max_jump_rise_time", "get_max_jump_rise_time");
 }
 
 void Player::_ready() {
@@ -54,4 +57,12 @@ void Player::set_gravity(const double p_gravity) {
 
 double Player::get_gravity() const {
 	return gravity;
+}
+
+void Player::set_max_jump_rise_time(const double p_max_jump_rise_time) {
+	max_jump_rise_time = p_max_jump_rise_time;
+}
+
+double Player::get_max_jump_rise_time() const {
+	return max_jump_rise_time;
 }

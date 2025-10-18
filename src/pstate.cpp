@@ -108,7 +108,7 @@ void PStateWalk::enter(String last_state, Dictionary data) {
 }
 
 void PStateWalk::handle_input(const Ref<InputEvent> &event) {
-	if (event.ptr()->is_action_pressed("jump")) {
+	if (event->is_action_pressed("jump")) {
 		emit_signal("switch_state", get_class(), "PStateJump", Dictionary());
 	}
 }
@@ -162,10 +162,21 @@ void PStateJump::enter(String next_state, Dictionary data) {
 	player->set_velocity(velocity);
 
 	player->move_and_slide();
+
+	air_time = 0;
+}
+
+void PStateJump::handle_input(const Ref<InputEvent> &event) {
+	if (event->is_action_released("jump")) {
+		air_time = player->get_max_jump_rise_time();
+	}
 }
 
 void PStateJump::physics_update(double delta) {
 	static String last_queued_animation = "";
+	static Input* input = Input::get_singleton();
+
+	air_time += delta;
 
 	Vector2 velocity = player->get_velocity();
 
@@ -175,18 +186,18 @@ void PStateJump::physics_update(double delta) {
 
 		animation_player->queue("jump_crest");
 		last_queued_animation = "jump_crest";
-		UtilityFunctions::print("here");
 
 	} else if (last_queued_animation != "jump_fall" &&
 		0 < velocity.y) {
 
 		animation_player->queue("jump_fall");
 		last_queued_animation = "jump_fall";
-		UtilityFunctions::print("here2");
 	}
 
-	velocity.y += player->get_gravity() * delta;
-	player->set_velocity(velocity);
+	if (air_time >= player->get_max_jump_rise_time()) {
+		velocity.y += player->get_gravity() * delta;
+		player->set_velocity(velocity);
+	}
 
 	player->move_and_slide();
 
