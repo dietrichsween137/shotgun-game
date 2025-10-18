@@ -45,6 +45,8 @@ void PStateIdle::enter(String last_state, Dictionary data) {
 		}
 		animation_player->queue("walk_second_step_to_idle");
 		set_animation_finish_time(.1);
+	} else if (current_animation == "jump_land") {
+		animation_player->queue("jump_land_to_idle");
 	}
 
 	animation_player->queue("idle");
