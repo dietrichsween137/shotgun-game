@@ -52,7 +52,7 @@ jobs:
         with:
           repository: dietrichsween137/aseprite
           ref: main
-          ssh-key: ${{ secrets.Job }}
+          ssh-key: ${{ secrets.JOB }}
           path: ./shotgun-game/aseprite
 
       # Lint
