@@ -39,7 +39,20 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          submodules: true
+          submodules: false
+
+      - name: Checkout godot-cpp submodule
+        uses: actions/checkout@v4
+        with:
+          repository: godotengine/godot-cpp
+          path: ./godot-cpp
+
+      - name: Checkout aseprite submodule
+        uses: actions/checkout@v4
+        with:
+          repository: dietrichsween137/aseprite
+          ssh-key: ${{ secrets.Job }}
+          path: ./shotgun-game/aseprite
 
       # Lint
       #- name: Setup clang-format
