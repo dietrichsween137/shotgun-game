@@ -146,3 +146,6 @@ jobs:
 
       - name: Unpack Artifacts
         run: unzip -u bin/godot-cpp-template.zip -d bin
+
+      - name: Commit & Push changes
+        uses: actions-js/push@master
