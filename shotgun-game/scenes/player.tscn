@@ -227,7 +227,7 @@ _data = {
 
 [node name="Player" type="Player"]
 jump_speed = 290.0
-gravity = 1200.0
+gravity = 1600.0
 max_jump_rise_time = 0.1
 
 [node name="Sprite2D" type="Sprite2D" parent="."]

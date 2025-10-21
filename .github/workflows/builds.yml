@@ -31,7 +31,7 @@ jobs:
             { platform: web, arch: wasm32, os: ubuntu-22.04 },
           ]
         target-type: [template_debug, template_release]
-        float-precision: [single, double]
+        float-precision: [single]
 
     runs-on: ${{ matrix.target.os }}
     steps:
@@ -45,6 +45,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: godotengine/godot-cpp
+          ref: 4.5
           path: ./godot-cpp
 
       - name: Checkout aseprite submodule
