@@ -137,6 +137,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           submodules: false
+          ssh-key: ${{ secrets.LOCAL_JOB }}
 
       - name: Download Artifacts
         uses: actions/download-artifact@v5
@@ -148,6 +149,9 @@ jobs:
         run: unzip -u bin/godot-cpp-template.zip -d bin
 
       - name: Commit & Push changes
-        uses: actions-js/push@master
-        with:
-          ssh-key: ${{ secrets.LOCAL_JOB }}
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add bin
+          git commit -m "Automatic compiled library update"
+          git push
