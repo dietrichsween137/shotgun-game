@@ -129,19 +129,20 @@ jobs:
           delete-merged: true
 
   download:
-    runs-on: ${{ matrix.target.os }}
+    runs-on: ubuntu-22.04
     needs: merge
     steps:
+      # Clone this repository
       - name: Checkout
         uses: actions/checkout@v4
         with:
           submodules: false
 
-      - name: Download Artifact
-        uses: actions/download-artifact@v5
+      - name: Download Artifacts
+        uses: actions/download-artifact/merge@v5
         with:
           name: godot-cpp-template
           path: bin
 
-      - name: Display structure of downloaded files
-        run: ls -R bin
+      - name: Unpack Artifacts
+        run: unzip -u bin/godot-cpp-template.zip -d bin
