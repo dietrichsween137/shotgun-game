@@ -127,3 +127,21 @@ jobs:
           name: godot-cpp-template
           pattern: godot-cpp-template-*
           delete-merged: true
+
+  download:
+    runs-on: ${{ matrix.target.os }}
+    needs: merge
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: false
+
+      - name: Download Artifact
+        uses: actions/download-artifact@v5
+        with:
+          name: godot-cpp-template
+          path: bin
+
+      - name: Display structure of downloaded files
+        run: ls -R bin
