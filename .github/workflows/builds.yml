@@ -149,3 +149,5 @@ jobs:
 
       - name: Commit & Push changes
         uses: actions-js/push@master
+        with:
+          ssh-key: ${{ secrets.LOCAL_JOB }}
