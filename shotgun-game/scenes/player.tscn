@@ -245,6 +245,7 @@ _data = {
 }
 
 [node name="Player" type="Player"]
+ground_speed = 160.0
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 light_mask = 0
