@@ -149,12 +149,9 @@ void PStateWalk::physics_update(double delta) {
 	}
 
 	Vector2 velocity = player->get_velocity();
-	if (sprite->is_flipped_h()) {
-		velocity.x = -player->get_ground_speed();
-	} else {
-		velocity.x = player->get_ground_speed();
-	}
+	velocity.x = horiz * player->get_ground_speed();
 	player->set_velocity(velocity);
+
 	player->move_and_slide();
 }
 
@@ -217,15 +214,36 @@ void PStateJumpCrest::enter(String next_state, Dictionary data) {
 }
 
 void PStateJumpCrest::physics_update(double delta) {
+	static Input* input = Input::get_singleton();
+
 	Vector2 velocity = player->get_velocity();
 	velocity.y += player->get_gravity() * delta;
 	velocity.y = Math::min((double) velocity.y, player->get_terminal_velocity());
-	player->set_velocity(velocity);
 
 	if (animation_player->get_current_animation() != "jump_crest" &&
 		velocity.y > 0) {
 		animation_player->play("jump_crest");
 	}
+
+	int horiz = static_cast<int>(input->get_axis("left", "right"));
+	switch (horiz) {
+		case -1:
+			sprite->set_flip_h(true);
+			break;
+		case 1:
+			sprite->set_flip_h(false);
+			break;
+	}
+
+	if (horiz != 0) {
+		velocity.x += horiz * player->get_aerial_accel() * delta;
+
+		if (std::abs(velocity.x) >= player->get_ground_speed()) {
+			velocity.x = horiz * player->get_ground_speed();
+		}
+	}
+
+	player->set_velocity(velocity);
 
 	if (velocity.y > 0 && velocity.y / player->get_terminal_velocity() > .25) {
 		Dictionary dict = Dictionary();
@@ -256,16 +274,37 @@ void PStateJumpFall::enter(String next_state, Dictionary data) {
 }
 
 void PStateJumpFall::physics_update(double delta) {
+	static Input* input = Input::get_singleton();
+
 	Vector2 velocity = player->get_velocity();
 	velocity.y += player->get_gravity() * delta;
 	velocity.y = Math::min((double) velocity.y, player->get_terminal_velocity());
-	player->set_velocity(velocity);
 
 	if (animation_player->get_current_animation() != "jump_fall_stretch" &&
 		velocity.y >= player->get_terminal_velocity()) {
 
 		animation_player->play("jump_fall_stretch");
 	}
+
+	int horiz = static_cast<int>(input->get_axis("left", "right"));
+	switch (horiz) {
+		case -1:
+			sprite->set_flip_h(true);
+			break;
+		case 1:
+			sprite->set_flip_h(false);
+			break;
+	}
+
+	if (horiz != 0) {
+		velocity.x += horiz * player->get_aerial_accel() * delta;
+
+		if (std::abs(velocity.x) >= player->get_ground_speed()) {
+			velocity.x = horiz * player->get_ground_speed();
+		}
+	}
+
+	player->set_velocity(velocity);
 
 	player->move_and_slide();
 
