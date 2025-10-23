@@ -269,7 +269,7 @@ void PStateJumpFall::_bind_methods() {
 }
 
 void PStateJumpFall::enter(String next_state, Dictionary data) {
-	animation_player->play("jump_fall");
+	animation_player->queue("jump_fall");
 	physics_update(data["delta"]);
 }
 
@@ -283,7 +283,7 @@ void PStateJumpFall::physics_update(double delta) {
 	if (animation_player->get_current_animation() != "jump_fall_stretch" &&
 		velocity.y >= player->get_terminal_velocity()) {
 
-		animation_player->play("jump_fall_stretch");
+		animation_player->queue("jump_fall_stretch");
 	}
 
 	int horiz = static_cast<int>(input->get_axis("left", "right"));
