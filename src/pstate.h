@@ -43,6 +43,7 @@ protected:
 	static void _bind_methods();
 public:
 	void enter(String next_state, Dictionary data) override;
+	void exit() override;
 	void handle_input(const Ref<InputEvent> &event) override;
 	void physics_update(double delta) override;
 };

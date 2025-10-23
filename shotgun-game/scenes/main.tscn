@@ -23,5 +23,7 @@ layer = 0
 [node name="Ruins_Test" parent="Level_Layer" instance=ExtResource("1_0wfyh")]
 
 [node name="Player" parent="Level_Layer" instance=ExtResource("1_o5qli")]
-ground_speed = 110
+ground_speed = 140.0
+jump_speed = 300.0
+max_jump_rise_time = 0.15
 position = Vector2(204, 198)

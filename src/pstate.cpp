@@ -1,5 +1,6 @@
 #include "pstate.h"
 #include "godot_cpp/classes/input_event.hpp"
+#include "godot_cpp/core/math.hpp"
 #include "godot_cpp/core/property_info.hpp"
 #include "godot_cpp/variant/dictionary.hpp"
 #include "godot_cpp/classes/input.hpp"
@@ -104,7 +105,13 @@ void PStateWalk::enter(String last_state, Dictionary data) {
 		animation_player->queue("walk_second_step");
 	}
 
+	animation_player->set_speed_scale(1.3);
+
 	physics_update(data["delta"]);
+}
+
+void PStateWalk::exit() {
+	animation_player->set_speed_scale(1.0);
 }
 
 void PStateWalk::handle_input(const Ref<InputEvent> &event) {
@@ -196,6 +203,7 @@ void PStateJump::physics_update(double delta) {
 
 	if (air_time >= player->get_max_jump_rise_time()) {
 		velocity.y += player->get_gravity() * delta;
+		velocity.y = Math::min((double) velocity.y, player->get_terminal_velocity());
 		player->set_velocity(velocity);
 	}
 

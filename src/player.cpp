@@ -1,11 +1,16 @@
 #include "player.h"
+#include "godot_cpp/variant/utility_functions.hpp"
 #include "state.h"
 #include "godot_cpp/core/property_info.hpp"
 #include <godot_cpp/core/class_db.hpp>
 
 using namespace godot;
 
-Player::Player():ground_speed {100}, jump_speed {200}, gravity {500}, max_jump_rise_time {2} {};
+Player::Player():ground_speed {500},
+		 jump_speed {200},
+		 gravity {500},
+		 max_jump_rise_time {2},
+		 terminal_velocity {200} {};
 
 void Player::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("get_ground_speed"), &Player::get_ground_speed);
@@ -16,11 +21,14 @@ void Player::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("set_gravity", "p_gravity"), &Player::set_gravity);
 	ClassDB::bind_method(D_METHOD("get_max_jump_rise_time"), &Player::get_max_jump_rise_time);
 	ClassDB::bind_method(D_METHOD("set_max_jump_rise_time", "p_max_jump_rise_time"), &Player::set_max_jump_rise_time);
+	ClassDB::bind_method(D_METHOD("get_terminal_velocity"), &Player::get_terminal_velocity);
+	ClassDB::bind_method(D_METHOD("set_terminal_velocity", "p_terminal_velocity"), &Player::set_terminal_velocity);
 
 	ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "ground_speed"), "set_ground_speed", "get_ground_speed");
 	ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "jump_speed"), "set_jump_speed", "get_jump_speed");
 	ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "gravity"), "set_gravity", "get_gravity");
 	ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "max_jump_rise_time"), "set_max_jump_rise_time", "get_max_jump_rise_time");
+	ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "terminal_velocity"), "set_terminal_velocity", "get_terminal_velocity");
 }
 
 void Player::_ready() {
@@ -37,6 +45,7 @@ void Player::_physics_process(double delta) {
 
 void Player::set_ground_speed(double p_ground_speed) {
 	ground_speed = p_ground_speed;
+	UtilityFunctions::print(ground_speed);
 }
 
 double Player::get_ground_speed() const {
@@ -65,4 +74,12 @@ void Player::set_max_jump_rise_time(const double p_max_jump_rise_time) {
 
 double Player::get_max_jump_rise_time() const {
 	return max_jump_rise_time;
+}
+
+void Player::set_terminal_velocity(const double p_terminal_velocity) {
+	terminal_velocity = p_terminal_velocity;
+}
+
+double Player::get_terminal_velocity() const {
+	return terminal_velocity;
 }
