@@ -23,12 +23,15 @@ void Player::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("set_max_jump_rise_time", "p_max_jump_rise_time"), &Player::set_max_jump_rise_time);
 	ClassDB::bind_method(D_METHOD("get_terminal_velocity"), &Player::get_terminal_velocity);
 	ClassDB::bind_method(D_METHOD("set_terminal_velocity", "p_terminal_velocity"), &Player::set_terminal_velocity);
+	ClassDB::bind_method(D_METHOD("get_aerial_accel"), &Player::get_aerial_accel);
+	ClassDB::bind_method(D_METHOD("set_aerial_accel", "p_aerial_accel"), &Player::set_aerial_accel);
 
 	ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "ground_speed"), "set_ground_speed", "get_ground_speed");
 	ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "jump_speed"), "set_jump_speed", "get_jump_speed");
 	ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "gravity"), "set_gravity", "get_gravity");
 	ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "max_jump_rise_time"), "set_max_jump_rise_time", "get_max_jump_rise_time");
 	ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "terminal_velocity"), "set_terminal_velocity", "get_terminal_velocity");
+	ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "aerial_accel"), "set_aerial_accel", "get_aerial_accel");
 }
 
 void Player::_ready() {
@@ -82,4 +85,12 @@ void Player::set_terminal_velocity(const double p_terminal_velocity) {
 
 double Player::get_terminal_velocity() const {
 	return terminal_velocity;
+}
+
+void Player::set_aerial_accel(const double p_aerial_accel) {
+	aerial_accel = p_aerial_accel;
+}
+
+double Player::get_aerial_accel() const {
+	return aerial_accel;
 }

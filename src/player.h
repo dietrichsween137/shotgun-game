@@ -19,6 +19,7 @@ private:
 	double gravity;
 	double max_jump_rise_time;
 	double terminal_velocity;
+	double aerial_accel;
 protected:
 	static void _bind_methods();
 public:
@@ -43,6 +44,9 @@ public:
 
 	void set_terminal_velocity(const double p_terminal_velocity);
 	double get_terminal_velocity() const;
+
+	void set_aerial_accel(const double p_aerial_accel);
+	double get_aerial_accel() const;
 };
 
 }
