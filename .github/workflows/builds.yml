@@ -141,7 +141,8 @@ jobs:
         with:
           name: godot-cpp-template
           path: shotgun-game/bin
-        run: ls shotgun-game/bin
+
+      - run: ls shotgun-game/bin
 
       - name: Unpack Artifacts
         run: unzip -u shotgun-game/bin/godot-cpp-template.zip -d shotgun-game/bin
