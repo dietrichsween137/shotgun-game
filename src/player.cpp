@@ -6,11 +6,11 @@
 
 using namespace godot;
 
-Player::Player():ground_speed {500},
-		 jump_speed {200},
-		 gravity {500},
-		 max_jump_rise_time {2},
-		 terminal_velocity {200} {};
+Player::Player():ground_speed {150},
+		 jump_speed {290},
+		 gravity {1750},
+		 max_jump_rise_time {.12},
+		 terminal_velocity {260} {};
 
 void Player::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("get_ground_speed"), &Player::get_ground_speed);

@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://dcagmydpuoyx1"]
+[gd_scene load_steps=17 format=3 uid="uid://dcagmydpuoyx1"]
 
 [ext_resource type="Texture2D" uid="uid://b456gooomh13" path="res://aseprite/characters/protagonist.png" id="1_3vyb7"]
 
@@ -58,7 +58,7 @@ tracks/0/keys = {
 
 [sub_resource type="Animation" id="Animation_ur7pv"]
 resource_name = "jump_fall"
-length = 0.2
+length = 0.1
 step = 0.1
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -67,10 +67,10 @@ tracks/0/path = NodePath("Sprite2D:frame_coords")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.1),
-"transitions": PackedFloat32Array(1, 1),
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [Vector2i(3, 4), Vector2i(4, 4)]
+"values": [Vector2i(3, 4)]
 }
 
 [sub_resource type="Animation" id="Animation_d2wvv"]
@@ -126,7 +126,7 @@ tracks/0/keys = {
 
 [sub_resource type="Animation" id="Animation_qlg0r"]
 resource_name = "jump_start"
-length = 0.1
+length = 0.2
 step = 0.1
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -135,10 +135,10 @@ tracks/0/path = NodePath("Sprite2D:frame_coords")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
+"times": PackedFloat32Array(0, 0.1),
+"transitions": PackedFloat32Array(1, 1),
 "update": 1,
-"values": [Vector2i(0, 4)]
+"values": [Vector2i(1, 4), Vector2i(1, 4)]
 }
 
 [sub_resource type="Animation" id="Animation_3vyb7"]
@@ -209,12 +209,30 @@ tracks/0/keys = {
 "values": [Vector2i(0, 3)]
 }
 
+[sub_resource type="Animation" id="Animation_3v2ag"]
+resource_name = "jump_fall_stretch"
+length = 0.1
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame_coords")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [Vector2i(4, 4)]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_g2els"]
 _data = {
 &"RESET": SubResource("Animation_tuyoq"),
 &"idle": SubResource("Animation_u8vuu"),
 &"jump_crest": SubResource("Animation_smehm"),
 &"jump_fall": SubResource("Animation_ur7pv"),
+&"jump_fall_stretch": SubResource("Animation_3v2ag"),
 &"jump_land": SubResource("Animation_d2wvv"),
 &"jump_land_to_idle": SubResource("Animation_y4r1p"),
 &"jump_rise": SubResource("Animation_fjrip"),
@@ -227,6 +245,10 @@ _data = {
 
 [node name="Player" type="Player"]
 ground_speed = 150.0
+jump_speed = 290.0
+gravity = 1750.0
+max_jump_rise_time = 0.12
+terminal_velocity = 260.0
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 light_mask = 0
@@ -251,13 +273,3 @@ libraries = {
 [node name="PStateWalk" type="PStateWalk" parent="StateMachine"]
 
 [node name="PStateJump" type="PStateJump" parent="StateMachine"]
-_import_path = NodePath("")
-unique_name_in_owner = false
-process_mode = 0
-process_priority = 0
-process_physics_priority = 0
-process_thread_group = 0
-physics_interpolation_mode = 0
-auto_translate_mode = 0
-editor_description = ""
-script = null

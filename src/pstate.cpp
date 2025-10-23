@@ -30,22 +30,25 @@ void PStateIdle::_bind_methods() {
 }
 
 void PStateIdle::enter(String last_state, Dictionary data) {
+	#define ANIMATION_FINISH_TIME .1
+	#define ANIMATION_FRAME(x) x/10.0
+
 	animation_player->clear_queue();
 
 	String current_animation = animation_player->get_current_animation();
 
 	if (current_animation == "walk_first_step") {
-		if (animation_player->get_current_animation_position() < .2) {
-			animation_player->seek(.3);
+		if (animation_player->get_current_animation_position() < ANIMATION_FRAME(2)) {
+			animation_player->seek(ANIMATION_FRAME(3));
 		}
 		animation_player->queue("walk_first_step_to_idle");
-		set_animation_finish_time(.1);
+		set_animation_finish_time(ANIMATION_FINISH_TIME);
 	} else if (current_animation == "walk_second_step") {
-		if (animation_player->get_current_animation_position() < .2) {
-			animation_player->seek(.3);
+		if (animation_player->get_current_animation_position() < ANIMATION_FRAME(2)) {
+			animation_player->seek(ANIMATION_FRAME(3));
 		}
 		animation_player->queue("walk_second_step_to_idle");
-		set_animation_finish_time(.1);
+		set_animation_finish_time(ANIMATION_FINISH_TIME);
 	} else if (current_animation == "jump_land") {
 		animation_player->queue("jump_land_to_idle");
 	}
@@ -163,7 +166,6 @@ void PStateJump::_bind_methods() {
 
 void PStateJump::enter(String next_state, Dictionary data) {
 	animation_player->play("jump_start");
-	animation_player->queue("jump_rise");
 
 	Vector2 velocity = player->get_velocity();
 	velocity.y += -player->get_jump_speed();
@@ -185,25 +187,20 @@ void PStateJump::handle_input(const Ref<InputEvent> &event) {
 }
 
 void PStateJump::physics_update(double delta) {
-	static String last_queued_animation = "";
+	#define JUMP_RISE_REMAINING_PROGRESS_THRES .1
+	#define JUMP_FALL_PROGRESS_THRES .1
 	static Input* input = Input::get_singleton();
 
 	air_time += delta;
 
 	Vector2 velocity = player->get_velocity();
 
-	if (last_queued_animation != "jump_crest" &&
-		0 < velocity.y &&
-		velocity.y > -player->get_jump_speed()) {
-
-		animation_player->queue("jump_crest");
-		last_queued_animation = "jump_crest";
-
-	} else if (last_queued_animation != "jump_fall" &&
-		0 < velocity.y) {
-
-		animation_player->queue("jump_fall");
-		last_queued_animation = "jump_fall";
+	if (velocity.y < 0 && Math::abs(velocity.y / player->get_jump_speed()) < JUMP_RISE_REMAINING_PROGRESS_THRES) {
+		animation_player->play("jump_crest");
+	} else if (velocity.y > 0 && Math::abs(velocity.y / player->get_terminal_velocity()) > JUMP_FALL_PROGRESS_THRES) {
+		animation_player->play("jump_fall");
+	} else if (velocity.y == player->get_terminal_velocity()) {
+		animation_player->play("jump_fall_stretch");
 	}
 
 	if (air_time >= player->get_max_jump_rise_time()) {
