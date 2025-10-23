@@ -59,6 +59,7 @@ public:
 	~PStateJump() {}
 
 	void enter(String next_state, Dictionary data) override;
+	void exit() override;
 	void handle_input(const Ref<InputEvent> &event) override;
 	void physics_update(double delta) override;
 };

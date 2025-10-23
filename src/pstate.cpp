@@ -112,6 +112,7 @@ void PStateWalk::enter(String last_state, Dictionary data) {
 
 void PStateWalk::exit() {
 	animation_player->set_speed_scale(1.0);
+	animation_player->clear_queue();
 }
 
 void PStateWalk::handle_input(const Ref<InputEvent> &event) {
@@ -173,6 +174,10 @@ void PStateJump::enter(String next_state, Dictionary data) {
 	air_time = 0;
 }
 
+void PStateJump::exit() {
+	animation_player->clear_queue();
+}
+
 void PStateJump::handle_input(const Ref<InputEvent> &event) {
 	if (event->is_action_released("jump")) {
 		air_time = player->get_max_jump_rise_time();
@@ -188,7 +193,7 @@ void PStateJump::physics_update(double delta) {
 	Vector2 velocity = player->get_velocity();
 
 	if (last_queued_animation != "jump_crest" &&
-		0 > velocity.y &&
+		0 < velocity.y &&
 		velocity.y > -player->get_jump_speed()) {
 
 		animation_player->queue("jump_crest");
