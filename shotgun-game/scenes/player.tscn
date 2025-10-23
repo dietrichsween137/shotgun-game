@@ -1,6 +1,6 @@
 [gd_scene load_steps=16 format=3 uid="uid://dcagmydpuoyx1"]
 
-[ext_resource type="Texture2D" uid="uid://brb36c01ayh6e" path="res://aseprite/characters/protagonist.png" id="1_3vyb7"]
+[ext_resource type="Texture2D" uid="uid://b456gooomh13" path="res://aseprite/characters/protagonist.png" id="1_3vyb7"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_g2els"]
 radius = 15.0
@@ -227,10 +227,6 @@ _data = {
 
 [node name="Player" type="Player"]
 ground_speed = 150.0
-jump_speed = 300.0
-gravity = 2000.0
-max_jump_rise_time = 0.15
-terminal_velocity = 280.0
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 light_mask = 0
@@ -255,3 +251,13 @@ libraries = {
 [node name="PStateWalk" type="PStateWalk" parent="StateMachine"]
 
 [node name="PStateJump" type="PStateJump" parent="StateMachine"]
+_import_path = NodePath("")
+unique_name_in_owner = false
+process_mode = 0
+process_priority = 0
+process_physics_priority = 0
+process_thread_group = 0
+physics_interpolation_mode = 0
+auto_translate_mode = 0
+editor_description = ""
+script = null
