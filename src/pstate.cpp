@@ -65,7 +65,7 @@ void PStateIdle::exit() {
 
 void PStateIdle::handle_input(const Ref<InputEvent> &event) {
 	if (event.ptr()->is_action_pressed("jump")) {
-		emit_signal("switch_state", get_class(), "PStateJump", Dictionary());
+		emit_signal("switch_state", get_class(), "PStateJumpRise", Dictionary());
 	}
 }
 
@@ -121,7 +121,7 @@ void PStateWalk::exit() {
 
 void PStateWalk::handle_input(const Ref<InputEvent> &event) {
 	if (event->is_action_pressed("jump")) {
-		emit_signal("switch_state", get_class(), "PStateJump", Dictionary());
+		emit_signal("switch_state", get_class(), "PStateJumpRise", Dictionary());
 	}
 }
 
@@ -158,56 +158,113 @@ void PStateWalk::physics_update(double delta) {
 	player->move_and_slide();
 }
 
-void PStateJump::_bind_methods() {
+void PStateJumpRise::_bind_methods() {
 	ADD_SIGNAL(MethodInfo("switch_state",
 		       PropertyInfo(Variant::STRING, "last_state"),
 		       PropertyInfo(Variant::STRING, "next_state"),
 		       PropertyInfo(Variant::DICTIONARY, "data")));
 }
 
-void PStateJump::enter(String next_state, Dictionary data) {
+void PStateJumpRise::enter(String next_state, Dictionary data) {
 	animation_player->play("jump_start");
 
 	Vector2 velocity = player->get_velocity();
 	velocity.y += -player->get_jump_speed();
 	player->set_velocity(velocity);
 
-	player->move_and_slide();
-
 	air_time = 0;
 }
 
-void PStateJump::exit() {
-	animation_player->clear_queue();
-}
-
-void PStateJump::handle_input(const Ref<InputEvent> &event) {
+void PStateJumpRise::handle_input(const Ref<InputEvent> &event) {
 	if (event->is_action_released("jump")) {
 		air_time = player->get_max_jump_rise_time();
 	}
 }
 
-void PStateJump::physics_update(double delta) {
+void PStateJumpRise::physics_update(double delta) {
 	#define JUMP_RISE_REMAINING_PROGRESS_THRES .1
 	#define JUMP_FALL_PROGRESS_THRES .1
 	static Input* input = Input::get_singleton();
 
 	air_time += delta;
 
-	Vector2 velocity = player->get_velocity();
-
-	if (velocity.y < 0 && Math::abs(velocity.y / player->get_jump_speed()) < JUMP_RISE_REMAINING_PROGRESS_THRES) {
-		animation_player->play("jump_crest");
-	} else if (velocity.y > 0 && Math::abs(velocity.y / player->get_terminal_velocity()) > JUMP_FALL_PROGRESS_THRES) {
-		animation_player->play("jump_fall");
-	} else if (velocity.y == player->get_terminal_velocity()) {
-		animation_player->play("jump_fall_stretch");
-	}
 
 	if (air_time >= player->get_max_jump_rise_time()) {
-		velocity.y += player->get_gravity() * delta;
-		velocity.y = Math::min((double) velocity.y, player->get_terminal_velocity());
-		player->set_velocity(velocity);
+		Dictionary dict = Dictionary();
+		dict["delta"] = delta;
+		emit_signal("switch_state", get_class(), "PStateJumpCrest", dict);
+	}
+
+	player->move_and_slide();
+
+	if (player->is_on_floor()) {
+		animation_player->play("jump_land");
+		Dictionary dict = Dictionary();
+		dict["delta"] = delta;
+		emit_signal("switch_state", get_class(), "PStateIdle", dict);
+	}
+}
+
+void PStateJumpCrest::_bind_methods() {
+	ADD_SIGNAL(MethodInfo("switch_state",
+		       PropertyInfo(Variant::STRING, "last_state"),
+		       PropertyInfo(Variant::STRING, "next_state"),
+		       PropertyInfo(Variant::DICTIONARY, "data")));
+}
+
+void PStateJumpCrest::enter(String next_state, Dictionary data) {
+	physics_update(data["delta"]);
+}
+
+void PStateJumpCrest::physics_update(double delta) {
+	Vector2 velocity = player->get_velocity();
+	velocity.y += player->get_gravity() * delta;
+	velocity.y = Math::min((double) velocity.y, player->get_terminal_velocity());
+	player->set_velocity(velocity);
+
+	if (animation_player->get_current_animation() != "jump_crest" &&
+		velocity.y > 0) {
+		animation_player->play("jump_crest");
+	}
+
+	if (velocity.y > 0 && velocity.y / player->get_terminal_velocity() > .25) {
+		Dictionary dict = Dictionary();
+		dict["delta"] = delta;
+		emit_signal("switch_state", get_class(), "PStateJumpFall", dict);
+	}
+
+	player->move_and_slide();
+
+	if (player->is_on_floor()) {
+		animation_player->play("jump_land");
+		Dictionary dict = Dictionary();
+		dict["delta"] = delta;
+		emit_signal("switch_state", get_class(), "PStateIdle", dict);
+	}
+}
+
+void PStateJumpFall::_bind_methods() {
+	ADD_SIGNAL(MethodInfo("switch_state",
+		       PropertyInfo(Variant::STRING, "last_state"),
+		       PropertyInfo(Variant::STRING, "next_state"),
+		       PropertyInfo(Variant::DICTIONARY, "data")));
+}
+
+void PStateJumpFall::enter(String next_state, Dictionary data) {
+	animation_player->play("jump_fall");
+	physics_update(data["delta"]);
+}
+
+void PStateJumpFall::physics_update(double delta) {
+	Vector2 velocity = player->get_velocity();
+	velocity.y += player->get_gravity() * delta;
+	velocity.y = Math::min((double) velocity.y, player->get_terminal_velocity());
+	player->set_velocity(velocity);
+
+	if (animation_player->get_current_animation() != "jump_fall_stretch" &&
+		velocity.y >= player->get_terminal_velocity()) {
+
+		animation_player->play("jump_fall_stretch");
 	}
 
 	player->move_and_slide();

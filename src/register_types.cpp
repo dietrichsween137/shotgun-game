@@ -24,7 +24,9 @@ void initialize_gdextension_types(ModuleInitializationLevel p_level)
 	GDREGISTER_ABSTRACT_CLASS(PState);
 	GDREGISTER_CLASS(PStateIdle);
 	GDREGISTER_CLASS(PStateWalk);
-	GDREGISTER_CLASS(PStateJump);
+	GDREGISTER_CLASS(PStateJumpRise);
+	GDREGISTER_CLASS(PStateJumpCrest);
+	GDREGISTER_CLASS(PStateJumpFall);
 }
 
 void uninitialize_gdextension_types(ModuleInitializationLevel p_level) {
