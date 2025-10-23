@@ -97,6 +97,7 @@ void PStateWalk::_bind_methods() {
 }
 
 void PStateWalk::enter(String last_state, Dictionary data) {
+	#define WALK_ANIMATION_SCALE 1.3
 	String current_animation = animation_player->get_current_animation();
 
 	if (current_animation == "jump_land") {
@@ -108,7 +109,7 @@ void PStateWalk::enter(String last_state, Dictionary data) {
 		animation_player->queue("walk_second_step");
 	}
 
-	animation_player->set_speed_scale(1.3);
+	animation_player->set_speed_scale(WALK_ANIMATION_SCALE);
 
 	physics_update(data["delta"]);
 }
