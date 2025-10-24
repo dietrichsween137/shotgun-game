@@ -142,8 +142,6 @@ jobs:
           name: godot-cpp-template
           path: shotgun-game/bin
 
-      - run: ls shotgun-game/bin
-
       - name: Unpack Artifacts
         run: unzip -u shotgun-game/bin/godot-cpp-template.zip -d shotgun-game/bin
 
@@ -151,6 +149,6 @@ jobs:
         run: |
           git config user.name github-actions
           git config user.email github-actions@github.com
-          git add bin
+          git add shotgun-game/bin
           git commit -m "Automatic compiled library update"
           git push
