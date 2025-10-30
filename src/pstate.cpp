@@ -34,6 +34,7 @@ void PStateIdle::enter(String last_state, Dictionary data) {
 	#define ANIMATION_FRAME(x) x/10.0
 
 	animation_player->clear_queue();
+	player->distance_fallen = -1;
 
 	String current_animation = animation_player->get_current_animation();
 
@@ -221,8 +222,13 @@ void PStateJumpCrest::physics_update(double delta) {
 	velocity.y = Math::min((double) velocity.y, player->get_terminal_velocity());
 
 	if (animation_player->get_current_animation() != "jump_crest" &&
-		velocity.y > 0) {
+		velocity.y >= 0) {
 		animation_player->play("jump_crest");
+		player->distance_fallen = 0;
+	}
+
+	if (player->distance_fallen >= 0) {
+		player->distance_fallen += velocity.y * delta;
 	}
 
 	int horiz = static_cast<int>(input->get_axis("left", "right"));
@@ -284,6 +290,10 @@ void PStateJumpFall::physics_update(double delta) {
 		velocity.y >= player->get_terminal_velocity()) {
 
 		animation_player->queue("jump_fall_stretch");
+	}
+
+	if (player->distance_fallen >= 0) {
+		player->distance_fallen += velocity.y * delta;
 	}
 
 	int horiz = static_cast<int>(input->get_axis("left", "right"));

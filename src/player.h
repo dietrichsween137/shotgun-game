@@ -20,9 +20,13 @@ private:
 	double max_jump_rise_time;
 	double terminal_velocity;
 	double aerial_accel;
+
+	friend class PState;
 protected:
 	static void _bind_methods();
 public:
+	double distance_fallen;
+
 	Player();
 	~Player() {}
 

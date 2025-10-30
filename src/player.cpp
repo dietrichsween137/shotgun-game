@@ -10,7 +10,8 @@ Player::Player():ground_speed {150},
 		 jump_speed {290},
 		 gravity {1750},
 		 max_jump_rise_time {.12},
-		 terminal_velocity {260} {};
+		 terminal_velocity {260},
+		 distance_fallen {-1} {};
 
 void Player::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("get_ground_speed"), &Player::get_ground_speed);
