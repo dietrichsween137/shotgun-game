@@ -1,9 +1,9 @@
 [gd_scene format=3 uid="uid://dxfq7nbiujf8q"]
 
 [ext_resource type="PackedScene" uid="uid://bq3w6lor8kqw4" path="res://scenes/ruins_test.tscn" id="1_0wfyh"]
-[ext_resource type="PackedScene" uid="uid://dcagmydpuoyx1" path="res://scenes/player.tscn" id="1_o5qli"]
 [ext_resource type="PackedScene" uid="uid://hkffxn337iah" path="res://scenes/background.tscn" id="1_sugp2"]
 [ext_resource type="PackedScene" uid="uid://cjptn0qr0wekr" path="res://scenes/purple_modulate.tscn" id="2_jyhfs"]
+[ext_resource type="PackedScene" uid="uid://cjjymlnxjynem" path="res://scenes/player2.tscn" id="4_jyhfs"]
 
 [node name="main" type="Node" unique_id=1424547016]
 
@@ -14,14 +14,15 @@ layer = -1
 position = Vector2(320, 180)
 
 [node name="PurpleModulate" parent="Background_Layer" unique_id=376470983 instance=ExtResource("2_jyhfs")]
-color = Color(0.003496597, 0.0022897106, 0.012108902, 1)
+color = Color(0, 0, 0, 1)
 
 [node name="Level_Layer" type="CanvasLayer" parent="." unique_id=687229760]
 layer = 0
 
-[node name="DirectionalLight2D" type="DirectionalLight2D" parent="Level_Layer" unique_id=612028152]
+[node name="DirectionalLight2D" type="DirectionalLight2D" parent="Level_Layer" unique_id=1422250377]
+energy = 0.6
 
 [node name="Ruins_Test" parent="Level_Layer" unique_id=1375155875 instance=ExtResource("1_0wfyh")]
 
-[node name="Player" parent="Level_Layer" unique_id=417137045 instance=ExtResource("1_o5qli")]
-position = Vector2(204, 198)
+[node name="Player" parent="Level_Layer" unique_id=2118801655 instance=ExtResource("4_jyhfs")]
+position = Vector2(206, 199)
