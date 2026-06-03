@@ -14,6 +14,7 @@ layer = -1
 position = Vector2(320, 180)
 
 [node name="PurpleModulate" parent="Background_Layer" unique_id=376470983 instance=ExtResource("2_jyhfs")]
+color = Color(0.003496597, 0.0022897106, 0.012108902, 1)
 
 [node name="Level_Layer" type="CanvasLayer" parent="." unique_id=687229760]
 layer = 0

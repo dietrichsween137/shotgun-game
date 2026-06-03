@@ -151,6 +151,13 @@ void PStateWalk::physics_update(double delta) {
 
 	Vector2 velocity = player->get_velocity();
 	velocity.x = horiz * player->get_ground_speed();
+
+	if (!player->is_on_floor()) {
+		Dictionary dict = Dictionary();
+		dict["delta"] = delta;
+		emit_signal("switch_state", get_class(), "PStateJumpFall", dict);
+	}
+
 	player->set_velocity(velocity);
 
 	player->move_and_slide();
