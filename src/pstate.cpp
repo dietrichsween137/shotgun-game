@@ -244,8 +244,22 @@ void PStateJumpCrest::physics_update(double delta) {
 	if (horiz != 0) {
 		velocity.x += horiz * player->get_aerial_accel() * delta;
 
-		if (std::abs(velocity.x) >= player->get_ground_speed()) {
-			velocity.x = horiz * player->get_ground_speed();
+		if (velocity.x > player->get_ground_speed()) {
+			velocity.x -= player->get_aerial_accel() * delta;
+		} else if (velocity.x < -1 * player->get_ground_speed()) {
+			velocity.x += player->get_aerial_accel() * delta;
+		}
+	} else {
+		if (velocity.x > 0) {
+			velocity.x -= player->get_aerial_accel() * delta;
+			if (velocity.x < 0) {
+				velocity.x = 0;
+			}
+		} else if (velocity.x < 0) {
+			velocity.x += player->get_aerial_accel() * delta;
+			if (velocity.x > 0) {
+				velocity.x = 0;
+			}
 		}
 	}
 
@@ -309,8 +323,22 @@ void PStateJumpFall::physics_update(double delta) {
 	if (horiz != 0) {
 		velocity.x += horiz * player->get_aerial_accel() * delta;
 
-		if (std::abs(velocity.x) >= player->get_ground_speed()) {
-			velocity.x = horiz * player->get_ground_speed();
+		if (velocity.x > player->get_ground_speed()) {
+			velocity.x -= player->get_aerial_accel() * delta;
+		} else if (velocity.x < -1 * player->get_ground_speed()) {
+			velocity.x += player->get_aerial_accel() * delta;
+		}
+	} else {
+		if (velocity.x > 0) {
+			velocity.x -= player->get_aerial_accel() * delta;
+			if (velocity.x < 0) {
+				velocity.x = 0;
+			}
+		} else if (velocity.x < 0) {
+			velocity.x += player->get_aerial_accel() * delta;
+			if (velocity.x > 0) {
+				velocity.x = 0;
+			}
 		}
 	}
 

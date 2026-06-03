@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3 uid="uid://dcagmydpuoyx1"]
+[gd_scene format=3 uid="uid://dcagmydpuoyx1"]
 
 [ext_resource type="Texture2D" uid="uid://b456gooomh13" path="res://aseprite/characters/protagonist.png" id="1_3vyb7"]
 
@@ -244,34 +244,32 @@ _data = {
 &"walk_second_step_to_idle": SubResource("Animation_dqkch")
 }
 
-[node name="Player" type="Player"]
+[node name="Player" type="Player" unique_id=2118801655]
 ground_speed = 160.0
-aerial_accel = 650.0
+aerial_accel = 700.0
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1759986987]
 light_mask = 0
 texture = ExtResource("1_3vyb7")
 hframes = 8
 vframes = 6
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1310496693]
 visible = false
 position = Vector2(-1, 6)
 shape = SubResource("CapsuleShape2D_g2els")
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-libraries = {
-&"": SubResource("AnimationLibrary_g2els")
-}
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=330468685]
+libraries/ = SubResource("AnimationLibrary_g2els")
 
-[node name="StateMachine" type="StateMachine" parent="."]
+[node name="StateMachine" type="StateMachine" parent="." unique_id=1500647805]
 
-[node name="PStateIdle" type="PStateIdle" parent="StateMachine"]
+[node name="PStateIdle" type="PStateIdle" parent="StateMachine" unique_id=1486725562]
 
-[node name="PStateWalk" type="PStateWalk" parent="StateMachine"]
+[node name="PStateWalk" type="PStateWalk" parent="StateMachine" unique_id=1947570264]
 
-[node name="PStateJumpRise" type="PStateJumpRise" parent="StateMachine"]
+[node name="PStateJumpRise" type="PStateJumpRise" parent="StateMachine" unique_id=1647215541]
 
-[node name="PStateJumpCrest" type="PStateJumpCrest" parent="StateMachine"]
+[node name="PStateJumpCrest" type="PStateJumpCrest" parent="StateMachine" unique_id=1794010521]
 
-[node name="PStateJumpFall" type="PStateJumpFall" parent="StateMachine"]
+[node name="PStateJumpFall" type="PStateJumpFall" parent="StateMachine" unique_id=1696557404]

@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://17tl8dqlqwgj"]
+[gd_scene format=3 uid="uid://17tl8dqlqwgj"]
 
 [ext_resource type="Script" uid="uid://d1kvohumilj4e" path="res://scenes/back_wall_torch.gd" id="1_5ta5g"]
 [ext_resource type="Texture2D" uid="uid://dbxsyarey3byv" path="res://aseprite/ruins/objects/back_wall_torch/simple.png" id="2_n2u0c"]
@@ -60,22 +60,21 @@ height = 256
 fill = 1
 fill_from = Vector2(0.5, 0.5)
 
-[node name="back wall torch" type="Node2D"]
+[node name="back wall torch" type="Node2D" unique_id=189382614]
+modulate = Color(0.30692267, 0.3069227, 0.3069227, 1)
 script = ExtResource("1_5ta5g")
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=448509411]
 texture = SubResource("CanvasTexture_bfu13")
 hframes = 5
 frame = 1
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-libraries = {
-&"": SubResource("AnimationLibrary_s0hx8")
-}
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=2054994436]
+libraries/ = SubResource("AnimationLibrary_s0hx8")
 
-[node name="PointLight2D" type="PointLight2D" parent="."]
+[node name="PointLight2D" type="PointLight2D" parent="." unique_id=737054946]
 position = Vector2(0, -5)
-color = Color(1, 0.580667, 0.26, 1)
+color = Color(1, 0.69131374, 0.47950423, 1)
 energy = 5.0
 texture = SubResource("GradientTexture2D_5n4a6")
 height = 5.0

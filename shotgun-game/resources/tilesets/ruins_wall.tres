@@ -1,4 +1,4 @@
-[gd_resource type="TileSet" load_steps=3 format=3 uid="uid://2nr5qohemo1x"]
+[gd_resource type="TileSet" format=3 uid="uid://2nr5qohemo1x"]
 
 [ext_resource type="Texture2D" uid="uid://c1hnl4d0y0low" path="res://resources/textures/ruins/ruins_wall.tres" id="1_jis16"]
 
