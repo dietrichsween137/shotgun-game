@@ -20,6 +20,6 @@ func _process(_delta: float) -> void:
 	var scalar:int = abs(_sprite2d.frame - 2)
 	_point_light2d.energy = Base_Energy - Energy_Scaling * scalar
 	
-	var current_radius: int = Base_Radius - Radius_Scaling * scalar
+	var current_radius:int = Base_Radius - Radius_Scaling * scalar
 	_point_light2d.texture.width = current_radius
 	_point_light2d.texture.height = current_radius
