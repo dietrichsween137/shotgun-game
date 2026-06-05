@@ -1,6 +1,17 @@
-[gd_scene format=3 uid="uid://dcagmydpuoyx1"]
+[gd_scene format=3 uid="uid://cjjymlnxjynem"]
 
-[ext_resource type="Texture2D" uid="uid://b456gooomh13" path="res://aseprite/characters/protagonist.png" id="1_3vyb7"]
+[ext_resource type="Texture2D" uid="uid://b12k0klpeja5n" path="res://resources/textures/characters/protag.tres" id="1_lttm1"]
+
+[sub_resource type="Gradient" id="Gradient_3vyb7"]
+colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_g2els"]
+gradient = SubResource("Gradient_3vyb7")
+width = 32
+height = 32
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+metadata/_snap_enabled = true
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_g2els"]
 radius = 15.0
@@ -246,9 +257,12 @@ _data = {
 
 [node name="Player" type="Player" unique_id=2118801655]
 
+[node name="PointLight2D" type="PointLight2D" parent="." unique_id=853718885]
+texture = SubResource("GradientTexture2D_g2els")
+height = 5.0
+
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1759986987]
-light_mask = 0
-texture = ExtResource("1_3vyb7")
+texture = ExtResource("1_lttm1")
 hframes = 8
 vframes = 6
 
