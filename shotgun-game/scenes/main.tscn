@@ -20,9 +20,11 @@ color = Color(0, 0, 0, 1)
 layer = 0
 
 [node name="DirectionalLight2D" type="DirectionalLight2D" parent="Level_Layer" unique_id=1422250377]
-energy = 0.6
+energy = 0.25
+height = 0.1
 
 [node name="Ruins_Test" parent="Level_Layer" unique_id=1375155875 instance=ExtResource("1_0wfyh")]
+position = Vector2(0, 79)
 
 [node name="Player" parent="Level_Layer" unique_id=2118801655 instance=ExtResource("4_jyhfs")]
-position = Vector2(207, 198)
+position = Vector2(208, 275)
