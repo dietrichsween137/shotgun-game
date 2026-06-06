@@ -1,0 +1,7 @@
+[gd_scene format=3 uid="uid://hkffxn337iah"]
+
+[ext_resource type="Texture2D" uid="uid://d14m3g61ghnoq" path="res://aseprite/environments/ruins/Background.png" id="1_bkp1e"]
+
+[node name="background" type="Sprite2D"]
+light_mask = 0
+texture = ExtResource("1_bkp1e")

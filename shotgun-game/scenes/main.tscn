@@ -1,30 +1,31 @@
 [gd_scene format=3 uid="uid://dxfq7nbiujf8q"]
 
-[ext_resource type="PackedScene" uid="uid://bq3w6lor8kqw4" path="res://scenes/ruins_test.tscn" id="1_0wfyh"]
-[ext_resource type="PackedScene" uid="uid://hkffxn337iah" path="res://scenes/background.tscn" id="1_sugp2"]
-[ext_resource type="PackedScene" uid="uid://cjptn0qr0wekr" path="res://scenes/purple_modulate.tscn" id="2_jyhfs"]
-[ext_resource type="PackedScene" uid="uid://cjjymlnxjynem" path="res://scenes/player.tscn" id="4_jyhfs"]
+[ext_resource type="PackedScene" uid="uid://bq3w6lor8kqw4" path="res://scenes/environments/ruins/ruins_test.tscn" id="1_0wfyh"]
+[ext_resource type="PackedScene" uid="uid://hkffxn337iah" path="res://scenes/environments/ruins/background.tscn" id="1_sugp2"]
+[ext_resource type="PackedScene" uid="uid://cjptn0qr0wekr" path="res://scenes/environments/ruins/purple_modulate.tscn" id="2_jyhfs"]
+[ext_resource type="PackedScene" uid="uid://cjjymlnxjynem" path="res://scenes/characters/player.tscn" id="4_jyhfs"]
+[ext_resource type="PackedScene" uid="uid://dsg1b0oleudso" path="res://scenes/misc/camera.tscn" id="5_tbgi4"]
 
-[node name="main" type="Node" unique_id=1424547016]
+[node name="main" type="Node2D" unique_id=465265673]
 
-[node name="Background_Layer" type="CanvasLayer" parent="." unique_id=1025796491]
+[node name="Background_Layer2" type="CanvasLayer" parent="." unique_id=1953987551]
 layer = -1
 
-[node name="background" parent="Background_Layer" unique_id=1715888146 instance=ExtResource("1_sugp2")]
+[node name="background" parent="Background_Layer2" unique_id=1087257451 instance=ExtResource("1_sugp2")]
 position = Vector2(320, 180)
 
-[node name="PurpleModulate" parent="Background_Layer" unique_id=376470983 instance=ExtResource("2_jyhfs")]
+[node name="PurpleModulate" parent="Background_Layer2" unique_id=1608104777 instance=ExtResource("2_jyhfs")]
 color = Color(0, 0, 0, 1)
 
-[node name="Level_Layer" type="CanvasLayer" parent="." unique_id=687229760]
-layer = 0
+[node name="level_layer" type="Node2D" parent="." unique_id=208047587]
 
-[node name="DirectionalLight2D" type="DirectionalLight2D" parent="Level_Layer" unique_id=1422250377]
-energy = 0.25
-height = 0.1
+[node name="Ruins_Test" parent="level_layer" unique_id=917443608 instance=ExtResource("1_0wfyh")]
 
-[node name="Ruins_Test" parent="Level_Layer" unique_id=1375155875 instance=ExtResource("1_0wfyh")]
-position = Vector2(0, 79)
+[node name="Player" parent="level_layer" unique_id=2118801655 instance=ExtResource("4_jyhfs")]
+position = Vector2(206, 198)
 
-[node name="Player" parent="Level_Layer" unique_id=2118801655 instance=ExtResource("4_jyhfs")]
-position = Vector2(208, 275)
+[node name="camera" parent="level_layer" unique_id=996133564 node_paths=PackedStringArray("target") instance=ExtResource("5_tbgi4")]
+target = NodePath("../Player")
+vertical_scale = 1.1
+horizontal_scale = 1.05
+horizontal_lead_scale = 3500.0

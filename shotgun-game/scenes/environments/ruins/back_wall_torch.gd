@@ -5,9 +5,9 @@ extends Node2D
 @export var Base_Radius:int = 256
 @export var Radius_Scaling:int = 1
 
-@onready var _animation_player = $AnimationPlayer
-@onready var _point_light2d = $PointLight2D
-@onready var _sprite2d = $Sprite2D
+@onready var _animation_player:AnimationPlayer = $AnimationPlayer
+@onready var _point_light2d:PointLight2D = $PointLight2D
+@onready var _sprite2d:Sprite2D = $Sprite2D
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
