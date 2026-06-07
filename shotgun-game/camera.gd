@@ -7,6 +7,8 @@ extends Camera2D
 
 @onready var last_target_position:Vector2 = target.position
 
+func _ready() -> void:
+	position = target.position
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:

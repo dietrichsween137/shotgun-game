@@ -8,13 +8,13 @@
 
 [node name="main" type="Node2D" unique_id=465265673]
 
-[node name="Background_Layer2" type="CanvasLayer" parent="." unique_id=1953987551]
+[node name="Background_Layer" type="CanvasLayer" parent="." unique_id=1953987551]
 layer = -1
 
-[node name="background" parent="Background_Layer2" unique_id=1087257451 instance=ExtResource("1_sugp2")]
+[node name="background" parent="Background_Layer" unique_id=1087257451 instance=ExtResource("1_sugp2")]
 position = Vector2(320, 180)
 
-[node name="PurpleModulate" parent="Background_Layer2" unique_id=1608104777 instance=ExtResource("2_jyhfs")]
+[node name="PurpleModulate" parent="Background_Layer" unique_id=1608104777 instance=ExtResource("2_jyhfs")]
 color = Color(0, 0, 0, 1)
 
 [node name="level_layer" type="Node2D" parent="." unique_id=208047587]
