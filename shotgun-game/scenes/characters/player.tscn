@@ -286,3 +286,5 @@ libraries/ = SubResource("AnimationLibrary_g2els")
 [node name="PStateJumpCrest" type="PStateJumpCrest" parent="StateMachine" unique_id=1794010521]
 
 [node name="PStateJumpFall" type="PStateJumpFall" parent="StateMachine" unique_id=1696557404]
+
+[node name="PStateFire" type="PStateFire" parent="StateMachine" unique_id=562834291]

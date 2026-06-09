@@ -5,6 +5,7 @@
 #include "godot_cpp/variant/dictionary.hpp"
 #include "godot_cpp/classes/input.hpp"
 #include "godot_cpp/variant/utility_functions.hpp"
+#include "godot_cpp/classes/viewport.hpp"
 #include "godot_cpp/variant/vector2.hpp"
 
 using namespace godot;
@@ -56,7 +57,6 @@ void PStateIdle::enter(String last_state, Dictionary data) {
 
 	animation_player->queue("idle");
 
-	player->set_velocity(Vector2(0, 0));
 }
 
 void PStateIdle::exit() {
@@ -67,26 +67,50 @@ void PStateIdle::exit() {
 void PStateIdle::handle_input(const Ref<InputEvent> &event) {
 	if (event.ptr()->is_action_pressed("jump")) {
 		emit_signal("switch_state", get_class(), "PStateJumpRise", Dictionary());
+	} else if (event.ptr()->is_action_pressed("click")) {
+		Dictionary dict = Dictionary();
+		dict["mouse_coords"] = player->get_viewport()->get_mouse_position();
+		UtilityFunctions::print(dict["mouse_coords"]);
+		emit_signal("switch_state", get_class(), "PStateFire", dict);
 	}
 }
 
 void PStateIdle::physics_update(double delta) {
 	static Input* input = Input::get_singleton();
 
+	if (animation_player->get_current_animation() == "idle") {
+		animation_player->set_speed_scale(1.0);
+	}
+
+	Vector2 velocity = player->get_velocity();
+
 	int horiz = static_cast<int>(input->get_axis("left", "right"));
 
 	switch (horiz) {
 		case 0:
+			if (-player->get_ground_speed() <= velocity.x && velocity.x <= player->get_ground_speed()) {
+				velocity = Vector2(0, 0);
+			} else if (player->get_ground_speed() < velocity.x) {
+				velocity.x -= player->get_ground_accel() * delta;
+			} else {
+				velocity.x += player->get_ground_accel() * delta;
+			}
 			break;
 		default:
 			Dictionary dict = Dictionary();
 			dict["delta"] = delta;
 			emit_signal("switch_state", get_class(), "PStateWalk", dict);
-			return;
+			break;
 	}
 
-	if (animation_player->get_current_animation() == "idle") {
-		animation_player->set_speed_scale(1.0);
+	player->set_velocity(velocity);
+
+	player->move_and_slide();
+
+	if (!player->is_on_floor()) {
+		Dictionary dict = Dictionary();
+		dict["delta"] = delta;
+		emit_signal("switch_state", get_class(), "PStateJumpFall", dict);
 	}
 }
 
@@ -111,8 +135,6 @@ void PStateWalk::enter(String last_state, Dictionary data) {
 	}
 
 	animation_player->set_speed_scale(WALK_ANIMATION_SCALE);
-
-	physics_update(data["delta"]);
 }
 
 void PStateWalk::exit() {
@@ -129,38 +151,55 @@ void PStateWalk::handle_input(const Ref<InputEvent> &event) {
 void PStateWalk::physics_update(double delta) {
 	static Input* input = Input::get_singleton();
 
-	int horiz = static_cast<int>(input->get_axis("left", "right"));
-	switch (horiz) {
-		case -1:
-			sprite->set_flip_h(true);
-			break;
-		case 1:
-			sprite->set_flip_h(false);
-			break;
-		case 0:
-			Dictionary dict = Dictionary();
-			dict["delta"] = delta;
-			emit_signal("switch_state", get_class(), "PStateIdle", dict);
-			return;
-	}
-
 	if (animation_player->get_queue().size() == 0) {
 		animation_player->queue("walk_first_step");
 		animation_player->queue("walk_second_step");
 	}
 
 	Vector2 velocity = player->get_velocity();
-	velocity.x = horiz * player->get_ground_speed();
+
+	#define GROUND_INPUT_ACCEL_SCALE .5
+
+	int horiz = static_cast<int>(input->get_axis("left", "right"));
+	switch (horiz) {
+		case -1:
+			sprite->set_flip_h(true);
+			if (-player->get_ground_speed() <= velocity.x && velocity.x <= player->get_ground_speed()) {
+				velocity.x = horiz * player->get_ground_speed();
+			} else if (player->get_ground_speed() < velocity.x ) {
+				velocity.x -= (1.0 / GROUND_INPUT_ACCEL_SCALE) * player->get_ground_accel() * delta;
+			} else {
+				velocity.x += GROUND_INPUT_ACCEL_SCALE * player->get_ground_accel() * delta;
+			}
+			break;
+		case 1:
+			sprite->set_flip_h(false);
+			if (-player->get_ground_speed() <= velocity.x && velocity.x <= player->get_ground_speed()) {
+				velocity.x = horiz * player->get_ground_speed();
+			} else if (player->get_ground_speed() < velocity.x ) {
+				velocity.x -= GROUND_INPUT_ACCEL_SCALE * player->get_ground_accel() * delta;
+			} else {
+				velocity.x += (1.0 / GROUND_INPUT_ACCEL_SCALE) * player->get_ground_accel() * delta;
+			}
+			break;
+		case 0:
+			Dictionary dict = Dictionary();
+			dict["delta"] = delta;
+			emit_signal("switch_state", get_class(), "PStateIdle", dict);
+			break;
+	}
+
+	#undef GROUND_INPUT_ACCEL_SCALE
+
+	player->set_velocity(velocity);
+
+	player->move_and_slide();
 
 	if (!player->is_on_floor()) {
 		Dictionary dict = Dictionary();
 		dict["delta"] = delta;
 		emit_signal("switch_state", get_class(), "PStateJumpFall", dict);
 	}
-
-	player->set_velocity(velocity);
-
-	player->move_and_slide();
 }
 
 void PStateJumpRise::_bind_methods() {
@@ -187,12 +226,7 @@ void PStateJumpRise::handle_input(const Ref<InputEvent> &event) {
 }
 
 void PStateJumpRise::physics_update(double delta) {
-	#define JUMP_RISE_REMAINING_PROGRESS_THRES .1
-	#define JUMP_FALL_PROGRESS_THRES .1
-	static Input* input = Input::get_singleton();
-
 	air_time += delta;
-
 
 	if (air_time >= player->get_max_jump_rise_time()) {
 		Dictionary dict = Dictionary();
@@ -218,7 +252,7 @@ void PStateJumpCrest::_bind_methods() {
 }
 
 void PStateJumpCrest::enter(String next_state, Dictionary data) {
-	physics_update(data["delta"]);
+	//physics_update(data["delta"]);
 }
 
 void PStateJumpCrest::physics_update(double delta) {
@@ -238,54 +272,58 @@ void PStateJumpCrest::physics_update(double delta) {
 		player->distance_fallen += velocity.y * delta;
 	}
 
+	#define AERIAL_INPUT_ACCEL_SCALE .5
+
 	int horiz = static_cast<int>(input->get_axis("left", "right"));
 	switch (horiz) {
 		case -1:
 			sprite->set_flip_h(true);
+			if (-player->get_ground_speed() <= velocity.x && velocity.x <= player->get_ground_speed()) {
+				velocity.x -= player->get_aerial_accel() * delta;
+			} else if (velocity.x < -player->get_ground_speed()) {
+				velocity.x += AERIAL_INPUT_ACCEL_SCALE * player->get_aerial_accel() * delta;
+			} else {
+				velocity.x -= (1.0 / AERIAL_INPUT_ACCEL_SCALE) * player->get_aerial_accel() * delta;
+			}
 			break;
 		case 1:
 			sprite->set_flip_h(false);
+			if (-player->get_ground_speed() <= velocity.x && velocity.x <= player->get_ground_speed()) {
+				velocity.x += player->get_aerial_accel() * delta;
+			} else if (velocity.x < -player->get_ground_speed()) {
+				velocity.x += (1.0 / AERIAL_INPUT_ACCEL_SCALE) * player->get_aerial_accel() * delta;
+			} else {
+				velocity.x -= AERIAL_INPUT_ACCEL_SCALE * player->get_aerial_accel() * delta;
+			}
+			break;
+		case 0:
+			if (velocity.x < 0) {
+				velocity.x += player->get_aerial_accel() * delta;
+			} else if (velocity.x > 0) {
+				velocity.x -= player->get_aerial_accel() * delta;
+			}
 			break;
 	}
 
-	if (horiz != 0) {
-		velocity.x += horiz * player->get_aerial_accel() * delta;
-
-		if (velocity.x > player->get_ground_speed()) {
-			velocity.x -= player->get_aerial_accel() * delta;
-		} else if (velocity.x < -1 * player->get_ground_speed()) {
-			velocity.x += player->get_aerial_accel() * delta;
-		}
-	} else {
-		if (velocity.x > 0) {
-			velocity.x -= player->get_aerial_accel() * delta;
-			if (velocity.x < 0) {
-				velocity.x = 0;
-			}
-		} else if (velocity.x < 0) {
-			velocity.x += player->get_aerial_accel() * delta;
-			if (velocity.x > 0) {
-				velocity.x = 0;
-			}
-		}
-	}
 
 	player->set_velocity(velocity);
 
-	if (velocity.y > 0 && velocity.y / player->get_terminal_velocity() > .25) {
+	player->move_and_slide();
+
+	#define PERCENTAGE_TERMINAL_VELOCITY .25
+
+	if (velocity.y > 0 && velocity.y / player->get_terminal_velocity() > PERCENTAGE_TERMINAL_VELOCITY) {
 		Dictionary dict = Dictionary();
 		dict["delta"] = delta;
 		emit_signal("switch_state", get_class(), "PStateJumpFall", dict);
-	}
-
-	player->move_and_slide();
-
-	if (player->is_on_floor()) {
+	} else if (player->is_on_floor()) {
 		animation_player->play("jump_land");
 		Dictionary dict = Dictionary();
 		dict["delta"] = delta;
 		emit_signal("switch_state", get_class(), "PStateIdle", dict);
 	}
+
+	#undef PERCENTAGE_TERMINAL_VELOCITY
 }
 
 void PStateJumpFall::_bind_methods() {
@@ -297,7 +335,6 @@ void PStateJumpFall::_bind_methods() {
 
 void PStateJumpFall::enter(String next_state, Dictionary data) {
 	animation_player->queue("jump_fall");
-	physics_update(data["delta"]);
 }
 
 void PStateJumpFall::physics_update(double delta) {
@@ -321,33 +358,34 @@ void PStateJumpFall::physics_update(double delta) {
 	switch (horiz) {
 		case -1:
 			sprite->set_flip_h(true);
+			if (-player->get_ground_speed() <= velocity.x && velocity.x <= player->get_ground_speed()) {
+				velocity.x -= player->get_aerial_accel() * delta;
+			} else if (velocity.x < -player->get_ground_speed()) {
+				velocity.x += AERIAL_INPUT_ACCEL_SCALE * player->get_aerial_accel() * delta;
+			} else {
+				velocity.x -= (1.0 / AERIAL_INPUT_ACCEL_SCALE) * player->get_aerial_accel() * delta;
+			}
 			break;
 		case 1:
 			sprite->set_flip_h(false);
+			if (-player->get_ground_speed() <= velocity.x && velocity.x <= player->get_ground_speed()) {
+				velocity.x += player->get_aerial_accel() * delta;
+			} else if (velocity.x < -player->get_ground_speed()) {
+				velocity.x += (1.0 / AERIAL_INPUT_ACCEL_SCALE) * player->get_aerial_accel() * delta;
+			} else {
+				velocity.x -= AERIAL_INPUT_ACCEL_SCALE * player->get_aerial_accel() * delta;
+			}
+			break;
+		case 0:
+			if (velocity.x < 0) {
+				velocity.x += player->get_aerial_accel() * delta;
+			} else if (velocity.x > 0) {
+				velocity.x -= player->get_aerial_accel() * delta;
+			}
 			break;
 	}
 
-	if (horiz != 0) {
-		velocity.x += horiz * player->get_aerial_accel() * delta;
-
-		if (velocity.x > player->get_ground_speed()) {
-			velocity.x -= player->get_aerial_accel() * delta;
-		} else if (velocity.x < -1 * player->get_ground_speed()) {
-			velocity.x += player->get_aerial_accel() * delta;
-		}
-	} else {
-		if (velocity.x > 0) {
-			velocity.x -= player->get_aerial_accel() * delta;
-			if (velocity.x < 0) {
-				velocity.x = 0;
-			}
-		} else if (velocity.x < 0) {
-			velocity.x += player->get_aerial_accel() * delta;
-			if (velocity.x > 0) {
-				velocity.x = 0;
-			}
-		}
-	}
+	#undef AERIAL_INPUT_ACCEL_SCALE
 
 	player->set_velocity(velocity);
 
@@ -359,4 +397,27 @@ void PStateJumpFall::physics_update(double delta) {
 		dict["delta"] = delta;
 		emit_signal("switch_state", get_class(), "PStateIdle", dict);
 	}
+}
+void PStateFire::_bind_methods() {
+	ADD_SIGNAL(MethodInfo("switch_state",
+		       PropertyInfo(Variant::STRING, "last_state"),
+		       PropertyInfo(Variant::STRING, "next_state"),
+		       PropertyInfo(Variant::DICTIONARY, "data")));
+}
+
+void PStateFire::enter(String next_state, Dictionary data) {
+	Vector2 velocity = player->get_velocity();
+	velocity.x += player->get_fire_speed();
+	velocity.y -= player->get_fire_speed_vertical();
+	player->set_velocity(velocity);
+
+	air_time = 0;
+}
+
+void PStateFire::physics_update(double delta) {
+	air_time += delta;
+	if (air_time >= player->get_max_fire_air_time()) {
+		emit_signal("switch_state", get_class(), "PStateJumpCrest", Dictionary());
+	}
+	player->move_and_slide();
 }

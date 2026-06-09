@@ -22,7 +22,11 @@ color = Color(0, 0, 0, 1)
 [node name="Ruins_Test" parent="level_layer" unique_id=917443608 instance=ExtResource("1_0wfyh")]
 
 [node name="Player" parent="level_layer" unique_id=2118801655 instance=ExtResource("4_jyhfs")]
-position = Vector2(206, 198)
+gravity = 1700.0
+max_jump_rise_time = 0.13
+terminal_velocity = 350.0
+ground_accel = 1200.0
+position = Vector2(206, 201)
 
 [node name="camera" parent="level_layer" unique_id=996133564 node_paths=PackedStringArray("target") instance=ExtResource("5_tbgi4")]
 target = NodePath("../Player")

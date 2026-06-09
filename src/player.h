@@ -20,6 +20,10 @@ private:
 	double max_jump_rise_time;
 	double terminal_velocity;
 	double aerial_accel;
+	double ground_accel;
+	double fire_speed;
+	double fire_speed_vertical;
+	double max_fire_air_time;
 
 	friend class PState;
 protected:
@@ -51,6 +55,18 @@ public:
 
 	void set_aerial_accel(const double p_aerial_accel);
 	double get_aerial_accel() const;
+
+	void set_ground_accel(const double p_ground_accel);
+	double get_ground_accel() const;
+
+	void set_fire_speed(const double p_fire_speed);
+	double get_fire_speed() const;
+
+	void set_fire_speed_vertical(const double p_fire_speed_vertical);
+	double get_fire_speed_vertical() const;
+
+	void set_max_fire_air_time(const double p_max_fire_air_time);
+	double get_max_fire_air_time() const;
 };
 
 }

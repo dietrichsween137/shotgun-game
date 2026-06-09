@@ -87,6 +87,22 @@ public:
 	void physics_update(double delta) override;
 };
 
+class PStateFire : public PState {
+	GDCLASS(PStateFire, PState);
+private:
+	double air_time;
+protected:
+	static void _bind_methods();
+public:
+	PStateFire() {}
+	~PStateFire() {}
+
+	void enter(String next_state, Dictionary data) override;
+	//void handle_input(const Ref<InputEvent> &event) override;
+	void physics_update(double delta) override;
+};
+
 }
+
 
 #endif
