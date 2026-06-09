@@ -26,6 +26,7 @@ gravity = 1700.0
 max_jump_rise_time = 0.13
 terminal_velocity = 350.0
 ground_accel = 1200.0
+coyote_time = 0.095
 position = Vector2(206, 201)
 
 [node name="camera" parent="level_layer" unique_id=996133564 node_paths=PackedStringArray("target") instance=ExtResource("5_tbgi4")]

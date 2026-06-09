@@ -55,6 +55,9 @@ void PStateIdle::enter(String last_state, Dictionary data) {
 		animation_player->queue("jump_land_to_idle");
 	}
 
+	#undef ANIMATION_FINISH_TIME
+	#undef ANIMATION_FRAME
+
 	animation_player->queue("idle");
 
 }
@@ -216,6 +219,8 @@ void PStateJumpRise::enter(String next_state, Dictionary data) {
 	velocity.y += -player->get_jump_speed();
 	player->set_velocity(velocity);
 
+	UtilityFunctions::print(player->get_velocity());
+
 	air_time = 0;
 }
 
@@ -249,10 +254,6 @@ void PStateJumpCrest::_bind_methods() {
 		       PropertyInfo(Variant::STRING, "last_state"),
 		       PropertyInfo(Variant::STRING, "next_state"),
 		       PropertyInfo(Variant::DICTIONARY, "data")));
-}
-
-void PStateJumpCrest::enter(String next_state, Dictionary data) {
-	//physics_update(data["delta"]);
 }
 
 void PStateJumpCrest::physics_update(double delta) {
@@ -333,12 +334,37 @@ void PStateJumpFall::_bind_methods() {
 		       PropertyInfo(Variant::DICTIONARY, "data")));
 }
 
-void PStateJumpFall::enter(String next_state, Dictionary data) {
+void PStateJumpFall::enter(String last_state, Dictionary data) {
 	animation_player->queue("jump_fall");
+	if (last_state == "PStateWalk") {
+		coyote_time = 0;
+		initial_velocity = player->get_velocity();
+	}
+}
+
+void PStateJumpFall::exit() {
+	coyote_time = (player->get_coyote_time());
+}
+
+void PStateJumpFall::handle_input(const Ref<InputEvent> &event) {
+	if (event.ptr()->is_action_pressed("jump") && coyote_time < player->get_coyote_time()) {
+		UtilityFunctions::print("Coyote time used");
+		player->set_velocity(initial_velocity);
+		emit_signal("switch_state", get_class(), "PStateJumpRise", Dictionary());
+	} else if (event.ptr()->is_action_pressed("click")) {
+		Dictionary dict = Dictionary();
+		dict["mouse_coords"] = player->get_viewport()->get_mouse_position();
+		UtilityFunctions::print(dict["mouse_coords"]);
+		emit_signal("switch_state", get_class(), "PStateFire", dict);
+	}
 }
 
 void PStateJumpFall::physics_update(double delta) {
 	static Input* input = Input::get_singleton();
+
+	if (coyote_time < player->get_coyote_time()) {
+		coyote_time += delta;
+	}
 
 	Vector2 velocity = player->get_velocity();
 	velocity.y += player->get_gravity() * delta;
@@ -405,7 +431,7 @@ void PStateFire::_bind_methods() {
 		       PropertyInfo(Variant::DICTIONARY, "data")));
 }
 
-void PStateFire::enter(String next_state, Dictionary data) {
+void PStateFire::enter(String last_state, Dictionary data) {
 	Vector2 velocity = player->get_velocity();
 	velocity.x += player->get_fire_speed();
 	velocity.y -= player->get_fire_speed_vertical();

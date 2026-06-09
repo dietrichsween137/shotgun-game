@@ -5,7 +5,7 @@
 using namespace godot;
 
 void StateMachine::_bind_methods() {
-	ClassDB::bind_method(D_METHOD("switch_state", "next_state"), &StateMachine::switch_state);
+	ClassDB::bind_method(D_METHOD("switch_state", "last_state", "next_state", "data"), &StateMachine::switch_state);
 }
 
 void StateMachine::_ready() {

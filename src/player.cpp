@@ -38,6 +38,8 @@ void Player::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("set_fire_speed_vertical", "p_fire_speed_vertical"), &Player::set_fire_speed_vertical);
 	ClassDB::bind_method(D_METHOD("get_max_fire_air_time"), &Player::get_max_fire_air_time);
 	ClassDB::bind_method(D_METHOD("set_max_fire_air_time", "p_max_fire_air_time"), &Player::set_max_fire_air_time);
+	ClassDB::bind_method(D_METHOD("get_coyote_time"), &Player::get_coyote_time);
+	ClassDB::bind_method(D_METHOD("set_coyote_time", "p_coyote_time"), &Player::set_coyote_time);
 
 	ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "ground_speed"), "set_ground_speed", "get_ground_speed");
 	ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "jump_speed"), "set_jump_speed", "get_jump_speed");
@@ -49,6 +51,7 @@ void Player::_bind_methods() {
 	ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "fire_speed"), "set_fire_speed", "get_fire_speed");
 	ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "fire_speed_vertical"), "set_fire_speed_vertical", "get_fire_speed_vertical");
 	ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "max_fire_air_time"), "set_max_fire_air_time", "get_max_fire_air_time");
+	ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "coyote_time"), "set_coyote_time", "get_coyote_time");
 }
 
 void Player::_ready() {
@@ -141,4 +144,12 @@ void Player::set_max_fire_air_time(const double p_max_fire_air_time) {
 
 double Player::get_max_fire_air_time() const {
 	return max_fire_air_time;
+}
+
+void Player::set_coyote_time(const double p_coyote_time) {
+	coyote_time = p_coyote_time;
+}
+
+double Player::get_coyote_time() const {
+	return coyote_time;
 }

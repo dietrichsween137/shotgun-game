@@ -31,7 +31,7 @@ private:
 protected:
 	static void _bind_methods();
 public:
-	void enter(String next_state, Dictionary data) override;
+	void enter(String last_state, Dictionary data) override;
 	void exit() override;
 	void handle_input(const Ref<InputEvent> &event) override;
 	void physics_update(double delta) override;
@@ -42,7 +42,7 @@ class PStateWalk : public PState {
 protected:
 	static void _bind_methods();
 public:
-	void enter(String next_state, Dictionary data) override;
+	void enter(String last_state, Dictionary data) override;
 	void exit() override;
 	void handle_input(const Ref<InputEvent> &event) override;
 	void physics_update(double delta) override;
@@ -58,7 +58,7 @@ public:
 	PStateJumpRise(): air_time {0} {}
 	~PStateJumpRise() {}
 
-	void enter(String next_state, Dictionary data) override;
+	void enter(String last_state, Dictionary data) override;
 	void handle_input(const Ref<InputEvent> &event) override;
 	void physics_update(double delta) override;
 };
@@ -71,19 +71,23 @@ public:
 	PStateJumpCrest() {}
 	~PStateJumpCrest() {}
 
-	void enter(String next_state, Dictionary data) override;
 	void physics_update(double delta) override;
 };
 
 class PStateJumpFall : public PState {
 	GDCLASS(PStateJumpFall, PState);
+private:
+	Vector2 initial_velocity;
+	double coyote_time;
 protected:
 	static void _bind_methods();
 public:
 	PStateJumpFall() {}
 	~PStateJumpFall() {}
 
-	void enter(String next_state, Dictionary data) override;
+	void enter(String last_state, Dictionary data) override;
+	void exit() override;
+	void handle_input(const Ref<InputEvent> &event) override;
 	void physics_update(double delta) override;
 };
 
@@ -97,8 +101,7 @@ public:
 	PStateFire() {}
 	~PStateFire() {}
 
-	void enter(String next_state, Dictionary data) override;
-	//void handle_input(const Ref<InputEvent> &event) override;
+	void enter(String last_state, Dictionary data) override;
 	void physics_update(double delta) override;
 };
 

@@ -24,6 +24,7 @@ private:
 	double fire_speed;
 	double fire_speed_vertical;
 	double max_fire_air_time;
+	double coyote_time;
 
 	friend class PState;
 protected:
@@ -67,6 +68,9 @@ public:
 
 	void set_max_fire_air_time(const double p_max_fire_air_time);
 	double get_max_fire_air_time() const;
+
+	void set_coyote_time(const double p_coyote_time);
+	double get_coyote_time() const;
 };
 
 }
