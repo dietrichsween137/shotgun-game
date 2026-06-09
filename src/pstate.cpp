@@ -219,8 +219,6 @@ void PStateJumpRise::enter(String next_state, Dictionary data) {
 	velocity.y += -player->get_jump_speed();
 	player->set_velocity(velocity);
 
-	UtilityFunctions::print(player->get_velocity());
-
 	air_time = 0;
 }
 

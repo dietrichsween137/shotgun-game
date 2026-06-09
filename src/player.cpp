@@ -8,13 +8,15 @@ using namespace godot;
 
 Player::Player():ground_speed {160},
 		 jump_speed {290},
-		 gravity {1750},
-		 max_jump_rise_time {.12},
-		 terminal_velocity {260},
+		 gravity {1700},
+		 max_jump_rise_time {.13},
+		 terminal_velocity {350},
 		 aerial_accel {700},
+		 ground_accel {1200},
 		 fire_speed {400},
 		 fire_speed_vertical {50},
 		 max_fire_air_time {.05},
+		 coyote_time {0.095},
 		 distance_fallen {-1} {};
 
 void Player::_bind_methods() {
