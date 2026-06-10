@@ -28,4 +28,4 @@ horizontal_scale = 1.05
 horizontal_lead_scale = 3500.0
 
 [node name="Player" parent="level_layer" unique_id=2118801655 instance=ExtResource("4_jyhfs")]
-position = Vector2(209, 198)
+position = Vector2(208, 190)

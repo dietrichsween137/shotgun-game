@@ -71,6 +71,7 @@ public:
 	PStateJumpCrest() {}
 	~PStateJumpCrest() {}
 
+	void handle_input(const Ref<InputEvent> &event) override;
 	void physics_update(double delta) override;
 };
 

@@ -72,8 +72,7 @@ void PStateIdle::handle_input(const Ref<InputEvent> &event) {
 		emit_signal("switch_state", get_class(), "PStateJumpRise", Dictionary());
 	} else if (event.ptr()->is_action_pressed("click")) {
 		Dictionary dict = Dictionary();
-		dict["mouse_coords"] = player->get_viewport()->get_mouse_position();
-		UtilityFunctions::print(dict["mouse_coords"]);
+		dict["mouse_pos"] = player->get_viewport()->get_mouse_position();
 		emit_signal("switch_state", get_class(), "PStateFire", dict);
 	}
 }
@@ -148,6 +147,10 @@ void PStateWalk::exit() {
 void PStateWalk::handle_input(const Ref<InputEvent> &event) {
 	if (event->is_action_pressed("jump")) {
 		emit_signal("switch_state", get_class(), "PStateJumpRise", Dictionary());
+	} else if (event.ptr()->is_action_pressed("click")) {
+		Dictionary dict = Dictionary();
+		dict["mouse_pos"] = player->get_viewport()->get_mouse_position();
+		emit_signal("switch_state", get_class(), "PStateFire", dict);
 	}
 }
 
@@ -225,6 +228,10 @@ void PStateJumpRise::enter(String next_state, Dictionary data) {
 void PStateJumpRise::handle_input(const Ref<InputEvent> &event) {
 	if (event->is_action_released("jump")) {
 		air_time = player->get_max_jump_rise_time();
+	} else if (event.ptr()->is_action_pressed("click")) {
+		Dictionary dict = Dictionary();
+		dict["mouse_pos"] = player->get_viewport()->get_mouse_position();
+		emit_signal("switch_state", get_class(), "PStateFire", dict);
 	}
 }
 
@@ -252,6 +259,14 @@ void PStateJumpCrest::_bind_methods() {
 		       PropertyInfo(Variant::STRING, "last_state"),
 		       PropertyInfo(Variant::STRING, "next_state"),
 		       PropertyInfo(Variant::DICTIONARY, "data")));
+}
+
+void PStateJumpCrest::handle_input(const Ref<InputEvent> &event) {
+	if (event.ptr()->is_action_pressed("click")) {
+		Dictionary dict = Dictionary();
+		dict["mouse_pos"] = player->get_viewport()->get_mouse_position();
+		emit_signal("switch_state", get_class(), "PStateFire", dict);
+	}
 }
 
 void PStateJumpCrest::physics_update(double delta) {
@@ -351,8 +366,7 @@ void PStateJumpFall::handle_input(const Ref<InputEvent> &event) {
 		emit_signal("switch_state", get_class(), "PStateJumpRise", Dictionary());
 	} else if (event.ptr()->is_action_pressed("click")) {
 		Dictionary dict = Dictionary();
-		dict["mouse_coords"] = player->get_viewport()->get_mouse_position();
-		UtilityFunctions::print(dict["mouse_coords"]);
+		dict["mouse_pos"] = player->get_viewport()->get_mouse_position();
 		emit_signal("switch_state", get_class(), "PStateFire", dict);
 	}
 }
@@ -430,9 +444,51 @@ void PStateFire::_bind_methods() {
 }
 
 void PStateFire::enter(String last_state, Dictionary data) {
+
+	// Calulate which fire angle mouse click location corresponds to
+	Vector2 mouse_pos = data["mouse_pos"];
+	Vector2 player_pos = player->get_global_transform_with_canvas().get_origin();
+
+	const std::vector<double> fire_angles {0.0, 3.14/4.0, 3.14/2.0, 3.14*3.0/4.0};
+	std::vector<double> distances {};
+
+	for (double fire_angle : fire_angles) {
+		distances.push_back(Math::abs(cos(fire_angle) * (player_pos.y - mouse_pos.y) - sin(fire_angle) * (player_pos.x - mouse_pos.x)));
+	}
+
+	int index_of_min = 0;
+	double min = distances[0];
+	for (int i = 1; i < distances.size(); i++) {
+		if (min > distances[i]) {
+			min = distances[i];
+			index_of_min = i;
+		}
+	}
+
+	// Instead of relying on sine and cosine signs, just manually make sure the kickback goes away from the shot (which is towards the click)
+	int horiz;
+	if (player_pos.x < mouse_pos.x) {
+		horiz = -1;
+	} else {
+		horiz = 1;
+	}
+	int vert;
+	if (player_pos.y < mouse_pos.y) {
+		vert = -1;
+	} else {
+		vert = 1;
+	}
+
+	if (horiz == 1) {
+		sprite->set_flip_h(true);
+	} else {
+		sprite->set_flip_h(false);
+	}
+
 	Vector2 velocity = player->get_velocity();
-	velocity.x += player->get_fire_speed();
-	velocity.y -= player->get_fire_speed_vertical();
+	velocity.x = horiz * Math::abs(cos(fire_angles[index_of_min])) * player->get_fire_speed();
+	velocity.y = vert * Math::abs(sin(fire_angles[index_of_min])) * player->get_fire_speed();
+
 	player->set_velocity(velocity);
 
 	air_time = 0;

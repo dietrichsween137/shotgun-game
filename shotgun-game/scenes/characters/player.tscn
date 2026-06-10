@@ -277,6 +277,8 @@ libraries/ = SubResource("AnimationLibrary_g2els")
 
 [node name="StateMachine" type="StateMachine" parent="." unique_id=1500647805]
 
+[node name="PStateJumpFall" type="PStateJumpFall" parent="StateMachine" unique_id=1696557404]
+
 [node name="PStateIdle" type="PStateIdle" parent="StateMachine" unique_id=1486725562]
 
 [node name="PStateWalk" type="PStateWalk" parent="StateMachine" unique_id=1947570264]
@@ -284,7 +286,5 @@ libraries/ = SubResource("AnimationLibrary_g2els")
 [node name="PStateJumpRise" type="PStateJumpRise" parent="StateMachine" unique_id=1647215541]
 
 [node name="PStateJumpCrest" type="PStateJumpCrest" parent="StateMachine" unique_id=1794010521]
-
-[node name="PStateJumpFall" type="PStateJumpFall" parent="StateMachine" unique_id=1696557404]
 
 [node name="PStateFire" type="PStateFire" parent="StateMachine" unique_id=562834291]
